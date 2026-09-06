@@ -97,21 +97,13 @@
           }
         }
 
-        img {
-          width: 34px;
-          height: 34px;
-          border-radius: 50%;
-          object-fit: cover;
-          border: 1.5px solid #a855f7;
-          box-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
-        }
-
         .player-name {
           color: #f8fafc;
           font-size: 12px;
           font-weight: 700;
           letter-spacing: 0.5px;
           font-family: "WinnerSans", sans-serif;
+          font-variant-numeric: tabular-nums;
         }
       }
 

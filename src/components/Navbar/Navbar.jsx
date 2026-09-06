@@ -3,17 +3,14 @@ import {
   FaBars,
   FaTimes,
   FaSearch,
-  FaUserAlt,
   FaBolt,
 } from "react-icons/fa";
 import "./Navbar.scss";
-import { NavLink, useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext.jsx";
+import { NavLink } from "react-router-dom";
 
-const Navbar = ({ onSignInClick, onBuyTokensClick }) => {
+const Navbar = ({ onSubscribeClick, onBuyTokensClick, onSignInClick }) => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const navigate = useNavigate();
-  const { user, tokens, isLoggedIn, isSubscribed } = useAuth();
+  const openSubscribe = onSubscribeClick || onBuyTokensClick || onSignInClick;
 
   return (
     <nav className="navbar">
@@ -114,52 +111,15 @@ const Navbar = ({ onSignInClick, onBuyTokensClick }) => {
             <FaSearch />
           </div>
 
-          {isLoggedIn ? (
-            <div className="auth-user-section">
-              <div
-                className={`token-pill-nav ${isSubscribed ? "subscribed" : ""}`}
-                title={isSubscribed ? "Active Unlimited Pass (Click to view Profile)" : "Get Subscription Pass"}
-                onClick={isSubscribed ? () => navigate("/profile") : onBuyTokensClick}
-              >
-                <FaBolt className="bolt" />
-                <span className="token-count">{isSubscribed ? "UNLIMITED" : "GET PASS"}</span>
-                <span className="token-label">{isSubscribed ? "PASS" : "1 GHS"}</span>
-              </div>
-
-              <div className="user-profile-menu">
-                <button
-                  className="user-profile-btn"
-                  onClick={() => navigate("/profile")}
-                  title="View Profile"
-                >
-                  <FaUserAlt />
-                  <span className="username">{user?.username || "GAMER"}</span>
-                </button>
-              </div>
-            </div>
-          ) : (
-            <button className="loginBtn" onClick={onSignInClick}>
-              <FaUserAlt />
-              <span>SIGN IN</span>
-            </button>
-          )}
+          <button className="loginBtn" onClick={openSubscribe}>
+            <FaBolt />
+            <span>SUBSCRIBE</span>
+          </button>
 
           <div className="mobileHeaderIcons">
-            {isLoggedIn && (
-              <div className="mobile-token-badge" onClick={isSubscribed ? () => navigate("/profile") : (onBuyTokensClick || (() => navigate("/profile")))}>
-                <FaBolt />
-                <span>{isSubscribed ? "VIP" : "PASS"}</span>
-              </div>
-            )}
-            {isLoggedIn ? (
-              <div className="icon-btn profile-icon" onClick={() => navigate("/profile")} title="Profile">
-                <FaUserAlt />
-              </div>
-            ) : (
-              <div className="icon-btn" onClick={onSignInClick} title="Sign In">
-                <FaUserAlt />
-              </div>
-            )}
+            <div className="icon-btn" onClick={openSubscribe} title="Subscribe">
+              <FaBolt />
+            </div>
           </div>
         </div>
       </div>

@@ -1,7 +1,13 @@
 import React, { createContext, useReducer, useEffect, useCallback } from "react";
 import { getCurrentUser } from "../services/authService";
-import { getToken, clearToken } from "../services/api";
+import { getToken, clearToken, setToken } from "../services/api";
 import { isSubscriptionValid } from "../services/mockBackend";
+import {
+  buildSubscriptionFromPlan,
+  getPlanById,
+  getPlanByOfferCode,
+} from "../config/subscriptionPlans.js";
+import { normalizeGhanaMsisdn } from "../config/subscription.js";
 
 const initialState = {
   user: null,
@@ -91,7 +97,47 @@ export const AuthProvider = ({ children }) => {
     });
   }, []);
 
+  const applyCgwSession = useCallback((payload) => {
+    const token = payload?.token;
+    const msisdn = normalizeGhanaMsisdn(payload?.msisdn || localStorage.getItem("phone") || "");
+    const offerCode = payload?.offerCode || localStorage.getItem("offerCode") || "";
+    const plan =
+      getPlanById(payload?.planId || payload?.plan || localStorage.getItem("selectedPlanId")) ||
+      getPlanByOfferCode(offerCode);
+    const subscription = buildSubscriptionFromPlan(plan, {
+      expiresAt: payload?.expiresAt,
+    });
+    const user = {
+      id: `cgw_${msisdn || "he"}`,
+      username: msisdn ? `Player_${msisdn.slice(-4)}` : "Player",
+      phoneNumber: msisdn ? `+${msisdn}` : "",
+      email: msisdn ? `${msisdn}@ghgamezone.com` : "player@ghgamezone.com",
+      role: "MEMBER",
+      avatar: "/avatars/avatar.png",
+      subscription,
+    };
+
+    if (token) setToken(token);
+    if (msisdn) localStorage.setItem("phone", msisdn);
+    if (offerCode) localStorage.setItem("offerCode", offerCode);
+    localStorage.setItem("selectedPlanId", plan.id);
+    localStorage.setItem(
+      "ghgz_cgw_session",
+      JSON.stringify({ user, subscription, token: token || getToken() })
+    );
+
+    dispatch({
+      type: "LOGIN_SUCCESS",
+      payload: { user, tokens: 999, subscription },
+    });
+
+    return { user, subscription };
+  }, []);
+
   const logoutUser = useCallback(() => {
+    localStorage.removeItem("ghgz_cgw_session");
+    localStorage.removeItem("offerCode");
+    localStorage.removeItem("selectedPlanId");
     dispatch({ type: "LOGOUT" });
   }, []);
 
@@ -115,6 +161,7 @@ export const AuthProvider = ({ children }) => {
     isSubscribed,
     subscription: state.subscription || state.user?.subscription || null,
     loginSuccess,
+    applyCgwSession,
     logoutUser,
     updateTokens,
     updateSubscription,

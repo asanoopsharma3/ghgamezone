@@ -1,29 +1,47 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./LeaderboardContent.scss";
 import {
   FaTrophy,
-  FaMedal,
   FaBolt,
   FaCrown,
-  FaFire,
   FaFacebook,
   FaInstagram,
   FaTwitter,
-  FaGamepad,
-  FaGift,
-  FaShieldAlt,
-  FaClock,
 } from "react-icons/fa";
+import { APP_CONFIG } from "../../config/app.config.js";
+import { fetchSubscribedPlayers } from "../../services/leaderboardService.js";
+
+const PACKAGE_FILTERS = ["DAILY", "WEEKLY", "MONTHLY"];
 
 const LeaderboardContent = ({ onSubscribeClick, onPolicyClick }) => {
-  const [timeframe, setTimeframe] = useState("WEEKLY");
-  // Empty player list ready for dynamic backend API integration
-  const [players] = useState([]);
+  const [timeframe, setTimeframe] = useState(
+    String(APP_CONFIG.leaderboardPackage || "daily").toUpperCase()
+  );
+  const [players, setPlayers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let active = true;
+    setLoading(true);
+    fetchSubscribedPlayers(timeframe.toLowerCase())
+      .then((data) => {
+        if (!active) return;
+        setPlayers(data.players || []);
+      })
+      .catch(() => {
+        if (active) setPlayers([]);
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [timeframe]);
 
   return (
     <div className="leaderboard-page-container">
-      {/* 1. HERO SECTION */}
       <section className="lb-hero">
         <div className="hero-bg-overlay">
           <img src="/games-bg.png" alt="Leaderboard background" />
@@ -32,14 +50,14 @@ const LeaderboardContent = ({ onSubscribeClick, onPolicyClick }) => {
         <div className="hero-content">
           <div className="text-col">
             <span className="hero-tag">
-              <FaTrophy /> GLOBAL TOURNAMENT
+              <FaTrophy /> SUBSCRIBED PLAYERS
             </span>
             <h1 className="hero-title">
-              LEADERBOARD <br />
-              <span className="purple">CHAMPIONS</span>
+              SUBSCRIBE <br />
+              <span className="purple">LEADERBOARD</span>
             </h1>
             <p className="hero-subtitle">
-              Compete across all 25 arcade games, score high, and claim real cash & data prizes on the official MTN leaderboard!
+              Current GHGameZone subscribers by package. Numbers are masked. Daily, weekly, and monthly lists follow the live offer config.
             </p>
           </div>
 
@@ -52,43 +70,9 @@ const LeaderboardContent = ({ onSubscribeClick, onPolicyClick }) => {
         </div>
       </section>
 
-      {/* 2. TOURNAMENT STATS BAR */}
-      <section className="lb-stats-banner">
-        <div className="stat-card">
-          <div className="stat-icon prize">
-            <FaGift />
-          </div>
-          <div className="stat-info">
-            <span className="stat-val">5,000 GHS</span>
-            <span className="stat-lbl">Weekly Prize Pool</span>
-          </div>
-        </div>
-
-        <div className="stat-card">
-          <div className="stat-icon time">
-            <FaClock />
-          </div>
-          <div className="stat-info">
-            <span className="stat-val">Weekly Reset</span>
-            <span className="stat-lbl">Live Season Active</span>
-          </div>
-        </div>
-
-        <div className="stat-card">
-          <div className="stat-icon games">
-            <FaGamepad />
-          </div>
-          <div className="stat-info">
-            <span className="stat-val">25 Games</span>
-            <span className="stat-lbl">Tournament Eligible</span>
-          </div>
-        </div>
-      </section>
-
-      {/* 3. TIMEFRAME FILTER BAR */}
       <section className="lb-filter-section">
         <div className="filter-pills">
-          {["DAILY", "WEEKLY", "MONTHLY", "ALL TIME"].map((tf) => (
+          {PACKAGE_FILTERS.map((tf) => (
             <button
               key={tf}
               className={`pill ${timeframe === tf ? "active" : ""}`}
@@ -100,44 +84,42 @@ const LeaderboardContent = ({ onSubscribeClick, onPolicyClick }) => {
         </div>
       </section>
 
-      {/* 4. MAIN RANKING CONTENT (DYNAMIC OR EMPTY STATE) */}
       <section className="lb-main-rankings">
-        {players.length === 0 ? (
+        {loading ? (
+          <div className="empty-rankings-box">
+            <p className="empty-desc">Loading subscribed players...</p>
+          </div>
+        ) : players.length === 0 ? (
           <div className="empty-rankings-box">
             <div className="empty-trophy-glow">
               <FaTrophy className="trophy-icon" />
             </div>
-            <h3 className="empty-title">NO RANKINGS TO SHOW</h3>
+            <h3 className="empty-title">NO SUBSCRIBED PLAYERS</h3>
             <p className="empty-desc">
-              Scores for the <strong>{timeframe}</strong> tournament cycle are being fetched from the server.
+              No active <strong>{timeframe}</strong> subscribers yet.
               <br />
-              Play any game right now to set the high score and claim the <strong>#1 Champion Rank</strong>!
+              Subscribe to appear on this list with a masked mobile number.
             </p>
             <div className="empty-actions">
-              <Link to="/games" className="play-now-btn">
-                <FaGamepad /> PLAY GAMES NOW
-              </Link>
               <button className="get-turns-btn" onClick={onSubscribeClick}>
-                <FaBolt /> GET TURNS / SUBSCRIBE
+                <FaBolt /> SUBSCRIBE NOW
               </button>
             </div>
           </div>
         ) : (
           <div className="rankings-table-wrap">
-            {/* When players array is populated from backend API */}
             <div className="rankings-list">
-              {players.map((p, idx) => (
-                <div className="rank-row-card" key={p.id || idx}>
-                  <span className="rank-num">#{idx + 1}</span>
+              {players.map((p) => (
+                <div className="rank-row-card" key={`${p.msisdn}-${p.rank}`}>
+                  <span className="rank-num">#{p.rank}</span>
                   <div className="player-profile">
-                    <img src={p.avatar || "/avatars/avatar.png"} alt={p.name} className="row-avatar" />
                     <div className="name-info">
-                      <span className="name">{p.name}</span>
-                      <span className="win-rate">Score: {p.score} PTS</span>
+                      <span className="name">{p.msisdn}</span>
+                      <span className="win-rate">{p.packageName}</span>
                     </div>
                   </div>
                   <div className="score-badge">
-                    <span>{p.score} PTS</span>
+                    <span>ACTIVE</span>
                   </div>
                 </div>
               ))}
@@ -146,42 +128,40 @@ const LeaderboardContent = ({ onSubscribeClick, onPolicyClick }) => {
         )}
       </section>
 
-      {/* 5. HOW LEADERBOARD WORKS / TOURNAMENT PERKS */}
       <section className="lb-perks-section">
         <div className="section-title-wrap">
-          <h3>HOW TO WIN REWARDS</h3>
+          <h3>HOW THIS LIST WORKS</h3>
           <span className="title-dash"></span>
         </div>
 
         <div className="perks-grid">
           <div className="perk-card">
             <div className="perk-badge">1</div>
-            <h4>Subscribe & Play</h4>
-            <p>Use your turns to play any of the 25 HTML5 games on GhGameZone.</p>
+            <h4>Subscribe</h4>
+            <p>Pick daily, weekly, or monthly. Your offer code and package are stored after activation.</p>
           </div>
 
           <div className="perk-card">
             <div className="perk-badge">2</div>
-            <h4>Rack Up High Scores</h4>
-            <p>Every match adds to your global point total and tournament standings.</p>
+            <h4>Masked number</h4>
+            <p>Only a masked MSISDN is shown. Player names are never displayed.</p>
           </div>
 
           <div className="perk-card">
             <div className="perk-badge">3</div>
-            <h4>Win MTN Rewards</h4>
-            <p>Top weekly & monthly finishers win instant airtime, data packages, and cash rewards!</p>
+            <h4>Package filters</h4>
+            <p>Switch daily, weekly, or monthly using the same subscriber table and offer config.</p>
           </div>
         </div>
       </section>
 
-      {/* 6. CALL TO ACTION BANNER */}
       <section className="lb-cta-section">
         <div className="cta-box">
           <div className="cta-text">
-            <h2>WANT TO CLIMB THE LEADERBOARD?</h2>
-            <p>Get game turns now and start setting high scores across all games!</p>
+            <h2>JOIN THE SUBSCRIBED PLAYERS</h2>
+            <p>Subscribe now and your masked number will appear on the live list.</p>
             <button className="subscribe-btn" onClick={onSubscribeClick}>
-              <FaBolt /> SUBSCRIBE & GET TURNS
+              <FaBolt /> SUBSCRIBE NOW
             </button>
           </div>
           <div className="cta-graphic">
@@ -192,7 +172,6 @@ const LeaderboardContent = ({ onSubscribeClick, onPolicyClick }) => {
         </div>
       </section>
 
-      {/* 7. FOOTER */}
       <footer className="lb-footer-container">
         <div className="footer-top-row">
           <div className="brand-col">

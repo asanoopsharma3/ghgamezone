@@ -21,7 +21,6 @@ import { LiaCarSideSolid } from "react-icons/lia";
 import { FaRegChessKing } from "react-icons/fa6";
 import { AiOutlineCompass } from "react-icons/ai";
 import { GAMES_CATALOG } from "../../data/gamesCatalog.js";
-import { useAuth } from "../../context/AuthContext.jsx";
 
 const categoryMeta = {
   action: {
@@ -74,7 +73,6 @@ const allCategories = [
 const CategoryGamesContent = ({ onGameClick, onSubscribeClick, onFooterPolicyClick }) => {
   const { categorySlug } = useParams();
   const navigate = useNavigate();
-  const { tokens, isLoggedIn, maxTokens } = useAuth();
   const currentSlug = (categorySlug || "action").toLowerCase();
   const currentCat = categoryMeta[currentSlug] || categoryMeta["action"];
 
@@ -116,23 +114,13 @@ const CategoryGamesContent = ({ onGameClick, onSubscribeClick, onFooterPolicyCli
           </div>
 
           <div className="attempts-card">
-            <span className="attempts-label">Attempts Remaining</span>
+            <span className="attempts-label">Subscription</span>
             <div className="attempts-count">
               <FaBolt className="lightning-icon" />
-              {isLoggedIn ? (
-                <>
-                  <span className="current">{tokens}</span>
-                  <span className="total"> / {maxTokens || 50}</span>
-                </>
-              ) : (
-                <>
-                  <span className="current">0</span>
-                  <span className="total"> / 0</span>
-                </>
-              )}
+              <span className="current">SUBSCRIBE</span>
             </div>
             <button className="buy-attempts-btn" onClick={onSubscribeClick}>
-              <span>BUY MORE ATTEMPTS</span>
+              <span>SUBSCRIBE</span>
               <FaChevronRight className="arrow" />
             </button>
           </div>

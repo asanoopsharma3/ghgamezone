@@ -29,8 +29,8 @@ const filterCategories = [
   "ADVENTURE",
 ];
 
-const GameHero = ({ onGameClick, onBuyAttemptsClick, onAuthClick }) => {
-  const { tokens, isLoggedIn, isSubscribed, maxTokens } = useAuth();
+const GameHero = ({ onGameClick, onBuyAttemptsClick }) => {
+  const { isSubscribed } = useAuth();
   const [activeCategory, setActiveCategory] = useState("ALL");
   const [favorites, setFavorites] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
@@ -149,27 +149,16 @@ const GameHero = ({ onGameClick, onBuyAttemptsClick, onAuthClick }) => {
             <span className="attempts-label">Subscription Status</span>
             <div className="attempts-count">
               <FaBolt className="lightning-icon" />
-              {isLoggedIn ? (
-                isSubscribed ? (
-                  <span className="current" style={{ fontSize: "20px", color: "#34d399" }}>UNLIMITED</span>
-                ) : (
-                  <span className="current" style={{ fontSize: "18px", color: "#f87171" }}>EXPIRED</span>
-                )
+              {isSubscribed ? (
+                <span className="current" style={{ fontSize: "20px", color: "#34d399" }}>UNLIMITED</span>
               ) : (
-                <span className="current" style={{ fontSize: "18px", color: "#94a3b8" }}>NOT SIGNED IN</span>
+                <span className="current" style={{ fontSize: "18px", color: "#94a3b8" }}>SUBSCRIBE</span>
               )}
             </div>
-            {isLoggedIn ? (
-              <button className="buy-attempts-btn" onClick={onBuyAttemptsClick}>
-                <span>{isSubscribed ? "EXTEND PASS" : "SUBSCRIBE (1 GHS)"}</span>
-                <FaChevronRight className="arrow" />
-              </button>
-            ) : (
-              <button className="buy-attempts-btn" onClick={onAuthClick}>
-                <span>SIGN IN WITH OTP</span>
-                <FaChevronRight className="arrow" />
-              </button>
-            )}
+            <button className="buy-attempts-btn" onClick={onBuyAttemptsClick}>
+              <span>SUBSCRIBE</span>
+              <FaChevronRight className="arrow" />
+            </button>
           </div>
         </div>
       </div>

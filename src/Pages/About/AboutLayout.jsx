@@ -6,7 +6,7 @@ import MobileNav from "../../components/MobileNav/MobileNav";
 const AboutLayout = ({ onSubscribeClick, onAuthClick, onPolicyClick }) => {
   return (
     <div className="about-layout-wrapper">
-      <Navbar onSignInClick={onAuthClick} onBuyTokensClick={onSubscribeClick} />
+      <Navbar onSubscribeClick={onSubscribeClick} />
       <AboutContent onSubscribeClick={onSubscribeClick} onPolicyClick={onPolicyClick} />
       <MobileNav />
     </div>

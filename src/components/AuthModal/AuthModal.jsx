@@ -15,7 +15,12 @@ import {
 } from "react-icons/fa";
 import { useAuth } from "../../context/AuthContext.jsx";
 import { sendOtp, verifyOtp } from "../../services/authService.js";
-import { SUBSCRIPTION_PACKAGES, initiatePayment, verifyPayment } from "../../services/paymentService.js";
+import { SUBSCRIPTION_PACKAGES } from "../../config/subscriptionPlans.js";
+import {
+  isValidLocalPhoneInput,
+  shouldUseHeFlow,
+  startCgwByNetwork,
+} from "../../config/subscription.js";
 
 const AuthModal = ({ isOpen, onClose, onLoginSuccess }) => {
   // Step: 1 = Phone number, 2 = OTP verification, 3 = Name/Profile, 4 = Subscription selection
@@ -31,7 +36,7 @@ const AuthModal = ({ isOpen, onClose, onLoginSuccess }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [authenticatedUser, setAuthenticatedUser] = useState(null);
 
-  const { loginSuccess, updateSubscription, updateTokens } = useAuth();
+  const { loginSuccess } = useAuth();
   const otpInputRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
 
   useEffect(() => {
@@ -200,29 +205,25 @@ const AuthModal = ({ isOpen, onClose, onLoginSuccess }) => {
     }
   };
 
-  // STEP 4: Confirm Subscription Package (Unlimited Time Plans)
+  // STEP 4: Confirm Subscription Package via MTN HE / NHE
   const handleConfirmSubscription = async () => {
     setErrorMessage("");
+    const useHe = shouldUseHeFlow();
+    const msisdn = phoneNumber || authenticatedUser?.phoneNumber || "";
+
+    if (!useHe && !isValidLocalPhoneInput(msisdn.replace(/^\+?233/, ""))) {
+      setErrorMessage("Please enter a valid MTN Ghana mobile number");
+      return;
+    }
+
     setLoading(true);
-
     try {
-      const order = await initiatePayment(selectedPackage.id);
-      const verifyResult = await verifyPayment({
-        orderId: order.orderId,
-        paymentId: `pay_${Date.now()}`,
-        packageId: selectedPackage.id,
-      });
-
-      if (verifyResult?.subscription) {
-        updateSubscription(verifyResult.subscription);
-        updateTokens(999);
-      }
-
-      onClose();
+      localStorage.setItem("offerCode", selectedPackage.offerCode);
+      localStorage.setItem("selectedPlanId", selectedPackage.id);
+      startCgwByNetwork(msisdn, selectedPackage.offerCode, selectedPackage.planKey);
     } catch (err) {
-      console.error("Payment error:", err);
-      setErrorMessage(err.message || "Subscription payment failed. Please try again.");
-    } finally {
+      console.error("Subscription redirect error:", err);
+      setErrorMessage(err.message || "Subscription failed. Please try again.");
       setLoading(false);
     }
   };

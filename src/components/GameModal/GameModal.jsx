@@ -80,7 +80,7 @@ const GameModal = ({
               <div className="game-meta-pills">
                 <span className="category-pill">{game.category}</span>
                 <span className="turns-pill">
-                  <FaBolt className="coin-icon" /> {turnsRemaining} Turns Remaining
+                  <FaBolt className="coin-icon" /> Unlimited Play
                 </span>
               </div>
             </div>

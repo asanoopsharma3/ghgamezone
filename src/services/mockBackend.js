@@ -1,45 +1,10 @@
+import { SUBSCRIPTION_PACKAGES as PLAN_PACKAGES } from "../config/subscriptionPlans.js";
+
 const STORAGE_KEY_USERS = "ghgz_db_users";
 const STORAGE_KEY_SESSION = "ghgz_db_current_session";
 const STORAGE_KEY_OTPS = "ghgz_db_otps";
 
-export const SUBSCRIPTION_PACKAGES = [
-  {
-    id: "pack_daily",
-    label: "DAILY PASS",
-    name: "GHGameZone daily",
-    price: 1,
-    currency: "GHS",
-    durationLabel: "1 Whole Day",
-    durationHours: 24,
-    durationMs: 24 * 60 * 60 * 1000,
-    popular: false,
-    desc: "Unlimited Play for 1 Whole Day (24 Hours)",
-  },
-  {
-    id: "pack_weekly",
-    label: "WEEKLY PASS",
-    name: "GHGameZone weekly",
-    price: 5,
-    currency: "GHS",
-    durationLabel: "1 Whole Week",
-    durationHours: 168,
-    durationMs: 7 * 24 * 60 * 60 * 1000,
-    popular: true,
-    desc: "Unlimited Play for a Week (7 Days)",
-  },
-  {
-    id: "pack_monthly",
-    label: "MONTHLY PASS",
-    name: "GHGameZone monthly",
-    price: 18,
-    currency: "GHS",
-    durationLabel: "1 Whole Month",
-    durationHours: 720,
-    durationMs: 30 * 24 * 60 * 60 * 1000,
-    popular: false,
-    desc: "Unlimited Play for a Month (30 Days)",
-  },
-];
+export const SUBSCRIPTION_PACKAGES = PLAN_PACKAGES;
 
 const getInitialUsers = () => {
   const existing = localStorage.getItem(STORAGE_KEY_USERS);

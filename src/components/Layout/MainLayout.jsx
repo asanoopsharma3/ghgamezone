@@ -13,7 +13,7 @@ const MainLayout = ({ onGameClick, onSubscribeClick, onAuthClick, onPolicyClick 
   const navigate = useNavigate();
   return (
     <div className="main-layout-wrapper">
-      <Navbar onSignInClick={onAuthClick} onBuyTokensClick={onSubscribeClick} />
+      <Navbar onSubscribeClick={onSubscribeClick} />
       <Hero onExploreClick={onGameClick} onLeaderboardClick={() => navigate('/leaderboard')} />
       <div className="section1">
         <div className="top-grid">

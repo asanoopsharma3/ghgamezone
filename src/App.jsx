@@ -1,5 +1,5 @@
-import React, { useState, useRef, useCallback } from "react";
-import { Routes, Route } from "react-router-dom";
+import React, { useState, useRef, useCallback, useEffect } from "react";
+import { Routes, Route, Navigate, useLocation, useNavigate } from "react-router-dom";
 import Home from "./components/Home/Home";
 import Games from "./Pages/Games/Games";
 import CategoryGames from "./Pages/CategoryGames/CategoryGames";
@@ -7,21 +7,23 @@ import About from "./Pages/About/About";
 import HowToPlay from "./Pages/HowToPlay/HowToPlay";
 import Contact from "./Pages/Contact/Contact";
 import Leaderboard from "./Pages/Leaderboard/Leaderboard";
-import Profile from "./Pages/Profile/Profile";
 import SubscribeModal from "./components/SubscribeModal/SubscribeModal";
-import AuthModal from "./components/AuthModal/AuthModal";
 import PolicyModal from "./components/PolicyModal/PolicyModal";
 import GameModal from "./components/GameModal/GameModal";
 import { getGameByTitleOrSlug } from "./data/gamesCatalog";
 import { useAuth } from "./context/AuthContext.jsx";
 import { deductToken } from "./services/tokenService.js";
+import { INITIAL_OFFER_CODE, normalizeGhanaMsisdn } from "./config/subscription.js";
+import { getPlanByOfferCode } from "./config/subscriptionPlans.js";
+import { resolveCgwCallbackNotice } from "./utils/cgwStatus.js";
 import "./App.scss";
 
 function App() {
-  const { user, tokens, isLoggedIn, isSubscribed, subscription, logoutUser, updateTokens, updateSubscription } = useAuth();
+  const { isSubscribed, applyCgwSession } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const [isSubscribeOpen, setIsSubscribeOpen] = useState(false);
-  const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [isPolicyOpen, setIsPolicyOpen] = useState(false);
   const [isGameOpen, setIsGameOpen] = useState(false);
   
@@ -32,6 +34,7 @@ function App() {
   const [toastMessage, setToastMessage] = useState("");
 
   const isDeductingRef = useRef(false);
+  const callbackHandledRef = useRef(false);
 
   const showToast = useCallback((msg, duration = 4000) => {
     setToastMessage(msg);
@@ -51,7 +54,7 @@ function App() {
     setSelectedGameTitle(targetGame.title);
 
     // 1. Not logged in or not subscribed -> Open Subscribe Modal directly
-    if (!isLoggedIn || !isSubscribed) {
+    if (!isSubscribed) {
       setPendingGameObj(targetGame);
       setIsSubscribeOpen(true);
       return;
@@ -75,15 +78,51 @@ function App() {
     } finally {
       isDeductingRef.current = false;
     }
-  }, [isLoggedIn, isSubscribed, showToast]);
+  }, [isSubscribed, showToast]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (
+      location.pathname === "/subscribe" ||
+      params.get("fallback") === "true" ||
+      params.get("subscribe") === "true"
+    ) {
+      setIsSubscribeOpen(true);
+    }
+  }, [location.search, location.pathname]);
+
+  useEffect(() => {
+    if (!location.pathname.includes("/activation/callback") || callbackHandledRef.current) return;
+    callbackHandledRef.current = true;
+
+    const params = new URLSearchParams(location.search);
+    const notice = resolveCgwCallbackNotice(params);
+    const token = params.get("token");
+    const offerCode = params.get("offerCode") || localStorage.getItem("offerCode") || INITIAL_OFFER_CODE;
+    const msisdn = normalizeGhanaMsisdn(params.get("msisdn") || localStorage.getItem("phone") || "");
+    const planId = params.get("plan") || localStorage.getItem("selectedPlanId");
+    const isSuccess = notice.success && Boolean(token);
+
+    navigate("/", { replace: true });
+
+    if (isSuccess && token) {
+      applyCgwSession({ token, msisdn, offerCode, planId });
+      const plan = getPlanByOfferCode(offerCode);
+      showToast(
+        notice.message === "Success"
+          ? `Successfully subscribed to ${plan?.name || "GHGameZone"}! Unlimited play is active.`
+          : notice.message
+      );
+      return;
+    }
+
+    showToast(notice.message || "Subscription could not be completed. Please try again.");
+    setIsSubscribeOpen(true);
+  }, [location.pathname, location.search, applyCgwSession, navigate, showToast]);
 
   const handleBuyAttemptsClick = () => {
     setSelectedGameTitle("");
     setIsSubscribeOpen(true);
-  };
-
-  const handleAuthClick = () => {
-    setIsAuthOpen(true);
   };
 
   const handlePolicyClick = (type) => {
@@ -92,10 +131,9 @@ function App() {
   };
 
   // Called after payment confirmed and subscription activated in database
-  const handleSubscribeSuccess = (planName, newSub) => {
+  const handleSubscribeSuccess = (planName) => {
     showToast(`🎉 Successfully Subscribed to ${planName || "GHGameZone"}! Unlimited Play Active.`);
-    
-    // If user clicked a game before buying subscription, launch it automatically
+
     if (pendingGameObj) {
       const g = pendingGameObj;
       setPendingGameObj(null);
@@ -103,23 +141,6 @@ function App() {
         handleGameClick(g);
       }, 500);
     }
-  };
-
-  // Called after user logs in or signs up
-  const handleLoginSuccess = (username) => {
-    showToast(`👋 Welcome to GHGameZone, ${username}!`);
-    if (pendingGameObj) {
-      const g = pendingGameObj;
-      setPendingGameObj(null);
-      setTimeout(() => {
-        handleGameClick(g);
-      }, 500);
-    }
-  };
-
-  const handleLogout = async () => {
-    await logoutUser();
-    showToast("Signed out successfully.");
   };
 
   return (
@@ -137,7 +158,26 @@ function App() {
             <Home
               onGameClick={handleGameClick}
               onSubscribeClick={handleBuyAttemptsClick}
-              onAuthClick={handleAuthClick}
+              onPolicyClick={handlePolicyClick}
+            />
+          }
+        />
+        <Route
+          path="/activation/callback"
+          element={
+            <Home
+              onGameClick={handleGameClick}
+              onSubscribeClick={handleBuyAttemptsClick}
+              onPolicyClick={handlePolicyClick}
+            />
+          }
+        />
+        <Route
+          path="/subscribe"
+          element={
+            <Home
+              onGameClick={handleGameClick}
+              onSubscribeClick={handleBuyAttemptsClick}
               onPolicyClick={handlePolicyClick}
             />
           }
@@ -148,7 +188,6 @@ function App() {
             <Games
               onGameClick={handleGameClick}
               onBuyAttemptsClick={handleBuyAttemptsClick}
-              onAuthClick={handleAuthClick}
             />
           }
         />
@@ -158,7 +197,6 @@ function App() {
             <CategoryGames
               onGameClick={handleGameClick}
               onSubscribeClick={handleBuyAttemptsClick}
-              onAuthClick={handleAuthClick}
               onFooterPolicyClick={handlePolicyClick}
             />
           }
@@ -168,7 +206,6 @@ function App() {
           element={
             <About
               onSubscribeClick={handleBuyAttemptsClick}
-              onAuthClick={handleAuthClick}
               onPolicyClick={handlePolicyClick}
             />
           }
@@ -178,7 +215,6 @@ function App() {
           element={
             <HowToPlay
               onSubscribeClick={handleBuyAttemptsClick}
-              onAuthClick={handleAuthClick}
               onPolicyClick={handlePolicyClick}
             />
           }
@@ -188,7 +224,6 @@ function App() {
           element={
             <Contact
               onSubscribeClick={handleBuyAttemptsClick}
-              onAuthClick={handleAuthClick}
               onPolicyClick={handlePolicyClick}
             />
           }
@@ -198,23 +233,11 @@ function App() {
           element={
             <Leaderboard
               onSubscribeClick={handleBuyAttemptsClick}
-              onAuthClick={handleAuthClick}
               onPolicyClick={handlePolicyClick}
             />
           }
         />
-        <Route
-          path="/profile"
-          element={
-            <Profile
-              user={user?.username || (typeof user === "string" ? user : null)}
-              onSubscribeClick={handleBuyAttemptsClick}
-              onLogout={handleLogout}
-              onAuthClick={handleAuthClick}
-              onPolicyClick={handlePolicyClick}
-            />
-          }
-        />
+        <Route path="/profile" element={<Navigate to="/" replace />} />
       </Routes>
 
       {/* POPUP MODALS */}
@@ -222,7 +245,7 @@ function App() {
         isOpen={isGameOpen}
         onClose={() => setIsGameOpen(false)}
         game={activeGameObj}
-        turnsRemaining={tokens}
+        turnsRemaining={null}
         onBuyTokensClick={() => {
           setIsGameOpen(false);
           setIsSubscribeOpen(true);
@@ -243,15 +266,6 @@ function App() {
         }}
         gameTitle={selectedGameTitle}
         onSubscribeSuccess={handleSubscribeSuccess}
-      />
-
-      <AuthModal
-        isOpen={isAuthOpen}
-        onClose={() => {
-          setIsAuthOpen(false);
-          setPendingGameObj(null);
-        }}
-        onLoginSuccess={handleLoginSuccess}
       />
 
       <PolicyModal

@@ -495,6 +495,78 @@
       }
     }
 
+    .nhe-phone-block {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 16px;
+
+      .input-label {
+        font-size: 13px;
+        font-weight: 600;
+        color: #e2e8f0;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .phone-input-group {
+        display: flex;
+        align-items: center;
+        background: #ffffff;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        height: 52px;
+
+        &:focus-within {
+          box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.5);
+        }
+
+        .country-prefix {
+          background: #f1f5f9;
+          color: #0f172a;
+          font-weight: 700;
+          font-size: 15px;
+          padding: 0 16px;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-right: 1px solid #e2e8f0;
+          user-select: none;
+        }
+
+        .phone-input {
+          flex: 1;
+          background: #ffffff;
+          border: none;
+          outline: none;
+          color: #0f172a;
+          font-size: 16px;
+          font-weight: 600;
+          padding: 0 16px;
+          height: 100%;
+          width: 100%;
+
+          &::placeholder {
+            color: #94a3b8;
+            font-weight: 400;
+          }
+        }
+      }
+    }
+
+    .he-auto-note {
+      color: #86efac;
+      font-size: 13px;
+      font-weight: 600;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin: 0 0 14px 0;
+    }
+
     .selected-phone-pill {
       display: flex;
       align-items: center;
