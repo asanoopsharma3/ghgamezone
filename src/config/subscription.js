@@ -38,6 +38,15 @@ export const isMobileDevice = () => {
   return Boolean(window.matchMedia?.("(max-width: 729px)")?.matches);
 };
 
+export const isSafariBrowser = () => {
+  if (typeof navigator === "undefined") return false;
+  const ua = navigator.userAgent || "";
+  const iOS = /iPhone|iPad|iPod/i.test(ua);
+  const iOSSafari = iOS && /WebKit/i.test(ua) && !/CriOS|FxiOS|EdgiOS|OPiOS|DuckDuckGo/i.test(ua);
+  const desktopSafari = /Safari/i.test(ua) && !/Chrome|Chromium|Android|CriOS|FxiOS|EdgiOS/i.test(ua);
+  return iOSSafari || (desktopSafari && isMobileDevice());
+};
+
 export const isMobileNetworkCandidate = () => {
   if (isWifiOrLanConnection()) return false;
   return getConnectionType() === "cellular";
@@ -46,7 +55,11 @@ export const isMobileNetworkCandidate = () => {
 export const shouldUseHeFlow = () => {
   if (FORCE_HE) return true;
   if (isWifiOrLanConnection()) return false;
-  return isMobileNetworkCandidate();
+  if (isMobileNetworkCandidate()) return true;
+  // Safari/iOS has no Network Information API, so cellular cannot be read.
+  // Treat mobile Safari as HE and skip the MSISDN field.
+  if (!getConnectionType() && (isSafariBrowser() || isMobileDevice())) return true;
+  return false;
 };
 
 export const subscribeToNetworkFlowChange = (onChange) => {
