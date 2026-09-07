@@ -89,8 +89,9 @@ export const sanitizeLocalPhoneInput = (value) =>
 export const isValidLocalPhoneInput = (value) =>
   sanitizeLocalPhoneInput(value).length === PHONE_INPUT_MAX_LENGTH;
 
-export const getHeRedirectParams = (offerCode = INITIAL_OFFER_CODE, planId = "daily") => {
-  const rawMsisdn = FORCE_HE && APP_CONFIG.cgw.localHeMsisdn ? APP_CONFIG.cgw.localHeMsisdn : "";
+export const getHeRedirectParams = (offerCode = INITIAL_OFFER_CODE, planId = "daily", msisdn = "") => {
+  const rawMsisdn =
+    msisdn || (FORCE_HE && APP_CONFIG.cgw.localHeMsisdn ? APP_CONFIG.cgw.localHeMsisdn : "");
   return {
     OfferCode: offerCode,
     msisdn: rawMsisdn ? normalizeGhanaMsisdn(rawMsisdn) : "",
@@ -98,10 +99,12 @@ export const getHeRedirectParams = (offerCode = INITIAL_OFFER_CODE, planId = "da
   };
 };
 
-export const startHeSubscription = (offerCode = INITIAL_OFFER_CODE, planId = "daily") => {
+export const startHeSubscription = (offerCode = INITIAL_OFFER_CODE, planId = "daily", msisdn = "") => {
   localStorage.setItem("offerCode", offerCode);
   localStorage.setItem("selectedPlanId", planId);
-  const params = new URLSearchParams(getHeRedirectParams(offerCode, planId));
+  const normalized = normalizeGhanaMsisdn(msisdn);
+  if (normalized) localStorage.setItem("phone", normalized);
+  const params = new URLSearchParams(getHeRedirectParams(offerCode, planId, msisdn));
   window.location.replace(`${HE_REDIRECT_URL}?${params.toString()}`);
 };
 
@@ -121,7 +124,7 @@ export const startNheSubscription = (msisdn, offerCode = INITIAL_OFFER_CODE, pla
 
 export const startCgwByNetwork = (msisdn, offerCode = INITIAL_OFFER_CODE, planId = "daily") => {
   if (shouldUseHeFlow()) {
-    startHeSubscription(offerCode, planId);
+    startHeSubscription(offerCode, planId, msisdn);
     return;
   }
   if (msisdn) {
