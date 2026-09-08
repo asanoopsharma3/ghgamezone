@@ -16,7 +16,7 @@ import {
 
 const SubscribeModal = ({ isOpen, onClose, gameTitle, onSubscribeSuccess }) => {
   const [packages] = useState(SUBSCRIPTION_PACKAGES);
-  const [selectedPkgId, setSelectedPkgId] = useState("pack_weekly");
+  const [selectedPkgId, setSelectedPkgId] = useState("pack_daily");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [showPhoneInput, setShowPhoneInput] = useState(() => !shouldUseHeFlow());
   const [isProcessing, setIsProcessing] = useState(false);
@@ -32,6 +32,7 @@ const SubscribeModal = ({ isOpen, onClose, gameTitle, onSubscribeSuccess }) => {
     if (!isOpen) return;
     setErrorMessage("");
     setIsProcessing(false);
+    setSelectedPkgId("pack_daily");
     setShowPhoneInput(!shouldUseHeFlow());
   }, [isOpen]);
 
