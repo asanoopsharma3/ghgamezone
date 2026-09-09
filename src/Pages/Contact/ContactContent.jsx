@@ -50,7 +50,7 @@ const ContactContent = ({ onPolicyClick }) => {
             <h3 className="hero-subtitle">We're Here to Help You!</h3>
             <p className="hero-description">
               Have questions about your subscription, game turns, prizes, or gameplay? 
-              Reach out to our official MTN customer care and THEGameio support channels.
+              Reach out to our official MTN customer care and THE Gameio support channels.
             </p>
           </div>
 
@@ -284,7 +284,7 @@ const ContactContent = ({ onPolicyClick }) => {
         </div>
 
         <div className="footer-bottom-copy">
-          <p>© 2026 THEGameio. All rights reserved.</p>
+          <p>© 2026 THE Gameio. All rights reserved.</p>
         </div>
       </footer>
     </div>

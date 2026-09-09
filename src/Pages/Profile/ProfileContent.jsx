@@ -188,7 +188,7 @@ const ProfileContent = ({ onSubscribeClick, onLogout, onAuthClick, onPolicyClick
                 <h3>SUBSCRIPTION VALIDITY</h3>
                 <span className="sub-tagline">
                   {isSubActive 
-                    ? `${activeSub?.planName || "THEGameio Pass"} • Unlimited Play Access`
+                    ? `${activeSub?.planName || "THE Gameio Pass"} • Unlimited Play Access`
                     : "No active unlimited subscription"}
                 </span>
               </div>
@@ -311,7 +311,7 @@ const ProfileContent = ({ onSubscribeClick, onLogout, onAuthClick, onPolicyClick
 
           <div className="sub-box">
             <div className="sub-top">
-              <span className="plan-title">{activeSub?.planName || "THEGameio PASS"}</span>
+              <span className="plan-title">{activeSub?.planName || "THE Gameio PASS"}</span>
               <span className={`status ${isSubActive ? "active" : "expired"}`}>
                 <FaCheckCircle /> {isSubActive ? "LIVE SYNCED" : "UNSUBSCRIBED"}
               </span>
@@ -387,7 +387,7 @@ const ProfileContent = ({ onSubscribeClick, onLogout, onAuthClick, onPolicyClick
         </div>
 
         <div className="footer-bottom-copy">
-          <p>© 2026 THEGameio. All rights reserved.</p>
+          <p>© 2026 THE Gameio. All rights reserved.</p>
         </div>
       </footer>
     </div>

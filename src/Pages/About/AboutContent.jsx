@@ -98,7 +98,7 @@ const AboutContent = ({ onPolicyClick }) => {
               EVERY <span className="highlight">GAMING</span> MOMENT
             </h1>
             <p className="hero-description">
-              THEGameio is your ultimate destination for quizzes, challenges, and competitive games.
+              THE Gameio is your ultimate destination for quizzes, challenges, and competitive games.
               We combine fun, fair competition, and rich rewards to deliver short,
               exciting gaming experiences anytime, anywhere across Ghana.
             </p>
@@ -141,7 +141,7 @@ const AboutContent = ({ onPolicyClick }) => {
           <div className="story-text-box">
             <h2 className="story-heading">Born to Play. Built to Inspire.</h2>
             <p className="story-p">
-              THEGameio was created with a simple mission – to make
+              THE Gameio was created with a simple mission – to make
               high-quality interactive quizzes and challenges accessible, engaging, and rewarding for every player.
             </p>
             <p className="story-p">
@@ -188,10 +188,10 @@ const AboutContent = ({ onPolicyClick }) => {
         </div>
       </section>
 
-      {/* 5. WHY THEGameio? STATS SECTION */}
+      {/* 5. WHY THE Gameio? STATS SECTION */}
       <section className="why-ghanawins-stats-section">
         <div className="section-header">
-          <h3>WHY THEGameio?</h3>
+          <h3>WHY THE Gameio?</h3>
           <span className="title-dash"></span>
         </div>
 
@@ -291,7 +291,7 @@ const AboutContent = ({ onPolicyClick }) => {
         </div>
 
         <div className="footer-bottom-copy">
-          <p>© 2026 THEGameio. All rights reserved.</p>
+          <p>© 2026 THE Gameio. All rights reserved.</p>
         </div>
       </footer>
     </div>

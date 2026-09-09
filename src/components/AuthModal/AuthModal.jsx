@@ -335,7 +335,7 @@ const AuthModal = ({ isOpen, onClose, onLoginSuccess }) => {
                 <div className="sms-content-col">
                   <span className="sms-sender">📲 MTN SMS NOTIFICATION</span>
                   <span className="sms-text">
-                    Your THEGameio verification OTP is <strong className="otp-highlight">{simulatedSmsOtp}</strong>. (Tap to fill)
+                    Your THE Gameio verification OTP is <strong className="otp-highlight">{simulatedSmsOtp}</strong>. (Tap to fill)
                   </span>
                 </div>
               </div>

@@ -43,14 +43,14 @@ const Navbar = ({ onSubscribeClick, onBuyTokensClick, onSignInClick }) => {
         </div>
 
         <div className="logo">
-          <NavLink to="/" aria-label="THEGameio home">
+          <NavLink to="/" aria-label="THE Gameio home">
             <BrandLogo size={42} />
           </NavLink>
         </div>
 
         <ul className={menuOpen ? "navLinks active" : "navLinks"}>
           <li className="mobile-nav-logo">
-            <NavLink to="/" onClick={() => setMenuOpen(false)} aria-label="THEGameio home">
+            <NavLink to="/" onClick={() => setMenuOpen(false)} aria-label="THE Gameio home">
               <BrandLogo size={48} />
             </NavLink>
           </li>

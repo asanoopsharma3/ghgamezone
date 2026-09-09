@@ -58,7 +58,7 @@ const LeaderboardContent = ({ onSubscribeClick, onPolicyClick }) => {
               <span className="purple">LEADERBOARD</span>
             </h1>
             <p className="hero-subtitle">
-              Current THEGameio subscribers by package. Numbers are masked. Daily, weekly, and monthly lists follow the live offer config.
+              Current THE Gameio subscribers by package. Numbers are masked. Daily, weekly, and monthly lists follow the live offer config.
             </p>
           </div>
 
@@ -214,7 +214,7 @@ const LeaderboardContent = ({ onSubscribeClick, onPolicyClick }) => {
         </div>
 
         <div className="footer-bottom-copy">
-          <p>© 2026 THEGameio. All rights reserved.</p>
+          <p>© 2026 THE Gameio. All rights reserved.</p>
         </div>
       </footer>
     </div>

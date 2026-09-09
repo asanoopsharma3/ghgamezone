@@ -48,7 +48,7 @@ const stepsData = [
 const faqData = [
   {
     q: "How does the subscription work?",
-    a: "Subscription gives you unlimited play access: THEGameio Daily for 1 GHS gives 1 whole day (24 hours) unlimited access, Weekly for 5 GHS gives 7 days unlimited play, and Monthly for 18 GHS gives 30 days unlimited play.",
+    a: "Subscription gives you unlimited play access: THE Gameio Daily for 1 GHS gives 1 whole day (24 hours) unlimited access, Weekly for 5 GHS gives 7 days unlimited play, and Monthly for 18 GHS gives 30 days unlimited play.",
   },
   {
     q: "How many game attempts do I get?",
@@ -123,7 +123,7 @@ const HowToPlayContent = ({ onSubscribeClick, onPolicyClick }) => {
               <span className="currency">GHS</span>
               <span className="amount">1</span>
             </div>
-            <span className="turns-label">THEGameio DAILY • 24H UNLIMITED</span>
+            <span className="turns-label">THE Gameio DAILY • 24H UNLIMITED</span>
           </div>
 
           <div className="sub-features-list">
@@ -259,7 +259,7 @@ const HowToPlayContent = ({ onSubscribeClick, onPolicyClick }) => {
         </div>
 
         <div className="footer-bottom-copy">
-          <p>© 2026 THEGameio. All rights reserved.</p>
+          <p>© 2026 THE Gameio. All rights reserved.</p>
         </div>
       </footer>
     </div>

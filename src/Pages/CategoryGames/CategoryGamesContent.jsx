@@ -267,7 +267,7 @@ const CategoryGamesContent = ({ onGameClick, onSubscribeClick, onFooterPolicyCli
         </div>
 
         <div className="footer-bottom-copy">
-          <p>© 2026 THEGameio. All rights reserved.</p>
+          <p>© 2026 THE Gameio. All rights reserved.</p>
         </div>
       </footer>
     </div>

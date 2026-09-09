@@ -141,7 +141,7 @@ const GameHero = ({ onGameClick, onBuyAttemptsClick }) => {
 
         <div className="hero-content-wrapper">
           <div className="hero-text-side">
-            <h1 className="games-title">THEGameio</h1>
+            <h1 className="games-title">THE Gameio</h1>
             <h3 className="games-subtitle">25 Instant Browser Mini Games</h3>
           </div>
 
@@ -300,7 +300,7 @@ const GameHero = ({ onGameClick, onBuyAttemptsClick }) => {
           </div>
           <div className="info-text">
             <h4>NEED UNLIMITED ACCESS?</h4>
-            <p>Get THEGameio Daily (1 GHS) or Weekly (5 GHS) with instant DB sync and secure checkout.</p>
+            <p>Get THE Gameio Daily (1 GHS) or Weekly (5 GHS) with instant DB sync and secure checkout.</p>
           </div>
           <FaChevronRight className="arrow-right" />
         </div>

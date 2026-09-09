@@ -13,7 +13,7 @@ const heroSlides = [
     tagConquer: "CONQUER",
     headingPrefix: "WELCOME TO",
     isSingleLine: true,
-    titleWhite: "THE",
+    titleWhite: "THE ",
     titlePurple: "Gameio",
     desc: "Your ultimate destination for free mini games. Play instantly. No downloads. Just pure fun!",
     primaryBtnText: "Explore Games",

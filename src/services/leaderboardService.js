@@ -8,14 +8,14 @@ export const maskMsisdn = (msisdn) => {
 };
 
 const DUMMY_SUBSCRIBERS = [
-  { msisdn: "233541110001", packageKey: "daily", packageName: "THEGameio daily" },
-  { msisdn: "233541110002", packageKey: "daily", packageName: "THEGameio daily" },
-  { msisdn: "233541110003", packageKey: "daily", packageName: "THEGameio daily" },
-  { msisdn: "233241110004", packageKey: "weekly", packageName: "THEGameio weekly" },
-  { msisdn: "233241110005", packageKey: "weekly", packageName: "THEGameio weekly" },
-  { msisdn: "233201110006", packageKey: "monthly", packageName: "THEGameio monthly" },
-  { msisdn: "233551110007", packageKey: "daily", packageName: "THEGameio daily" },
-  { msisdn: "233271110008", packageKey: "weekly", packageName: "THEGameio weekly" },
+  { msisdn: "233541110001", packageKey: "daily", packageName: "THE Gameio daily" },
+  { msisdn: "233541110002", packageKey: "daily", packageName: "THE Gameio daily" },
+  { msisdn: "233541110003", packageKey: "daily", packageName: "THE Gameio daily" },
+  { msisdn: "233241110004", packageKey: "weekly", packageName: "THE Gameio weekly" },
+  { msisdn: "233241110005", packageKey: "weekly", packageName: "THE Gameio weekly" },
+  { msisdn: "233201110006", packageKey: "monthly", packageName: "THE Gameio monthly" },
+  { msisdn: "233551110007", packageKey: "daily", packageName: "THE Gameio daily" },
+  { msisdn: "233271110008", packageKey: "weekly", packageName: "THE Gameio weekly" },
 ];
 
 const toPlayerRows = (rows) =>

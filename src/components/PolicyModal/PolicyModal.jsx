@@ -19,15 +19,15 @@ const termsSections = [
     num: "1",
     title: "Eligibility",
     items: [
-      "Participation in THEGameio is open to users who are legally eligible to subscribe and participate under the laws and regulations of their country. By using the service, you confirm that you meet all applicable eligibility requirements.",
+      "Participation in THE Gameio is open to users who are legally eligible to subscribe and participate under the laws and regulations of their country. By using the service, you confirm that you meet all applicable eligibility requirements.",
     ],
   },
   {
     num: "2",
     title: "Subscription Service",
-    intro: "THEGameio is a subscription-based entertainment and quiz platform.",
+    intro: "THE Gameio is a subscription-based entertainment and quiz platform.",
     items: [
-      "Subscription plans may include Daily, Weekly, or Monthly options (THEGameio daily: 1 GHS, THEGameio weekly: 5 GHS, THEGameio monthly: 18 GHS).",
+      "Subscription plans may include Daily, Weekly, or Monthly options (THE Gameio daily: 1 GHS, THE Gameio weekly: 5 GHS, THE Gameio monthly: 18 GHS).",
       "Applicable subscription fees will be charged through your mobile operator or approved payment method.",
       "Subscription renewals may occur automatically until cancelled by the user.",
       "Users may unsubscribe at any time through the available unsubscribe mechanisms.",
@@ -37,7 +37,7 @@ const termsSections = [
     num: "3",
     title: "Service Description",
     items: [
-      "Subscribers gain access to quizzes, challenges, games, leaderboards, rewards programs, and other promotional activities available on THEGameio.",
+      "Subscribers gain access to quizzes, challenges, games, leaderboards, rewards programs, and other promotional activities available on THE Gameio.",
     ],
   },
   {
@@ -47,7 +47,7 @@ const termsSections = [
       "Users can participate in quizzes and challenges to earn points.",
       "Points are awarded based on successful participation and correct answers.",
       "The number of points awarded for each activity may vary.",
-      "THEGameio reserves the right to modify point allocation mechanisms at any time.",
+      "THE Gameio reserves the right to modify point allocation mechanisms at any time.",
     ],
   },
   {
@@ -57,7 +57,7 @@ const termsSections = [
       "Users are ranked on leaderboards based on accumulated points.",
       "Leaderboards may be Daily, Weekly, Monthly, or Promotional.",
       "Rankings are updated automatically based on platform activity.",
-      "In the event of a tie, THEGameio may apply additional criteria to determine rankings.",
+      "In the event of a tie, THE Gameio may apply additional criteria to determine rankings.",
     ],
   },
   {
@@ -75,7 +75,7 @@ const termsSections = [
     title: "Winner Selection",
     items: [
       "Winners are selected based on leaderboard rankings, accumulated points, promotional mechanics, or random draws where applicable.",
-      "All winner selections are final once verified by THEGameio.",
+      "All winner selections are final once verified by THE Gameio.",
       "The platform reserves the right to request identity verification before prize distribution.",
     ],
   },
@@ -95,7 +95,7 @@ const termsSections = [
     num: "9",
     title: "User Responsibilities",
     items: [
-      "Users are responsible for ensuring that the mobile number and information provided are accurate and up to date. THEGameio is not responsible for rewards that cannot be delivered due to incorrect user information.",
+      "Users are responsible for ensuring that the mobile number and information provided are accurate and up to date. THE Gameio is not responsible for rewards that cannot be delivered due to incorrect user information.",
     ],
   },
   {
@@ -124,28 +124,28 @@ const termsSections = [
     num: "12",
     title: "Service Availability",
     items: [
-      "While we strive to provide uninterrupted access, THEGameio does not guarantee continuous availability. Service interruptions may occur due to maintenance, network issues, technical failures, or circumstances beyond our control.",
+      "While we strive to provide uninterrupted access, THE Gameio does not guarantee continuous availability. Service interruptions may occur due to maintenance, network issues, technical failures, or circumstances beyond our control.",
     ],
   },
   {
     num: "13",
     title: "Limitation of Liability",
     items: [
-      "THEGameio, its partners, affiliates, and mobile operators shall not be liable for any indirect, incidental, consequential, or special damages arising from the use of the service.",
+      "THE Gameio, its partners, affiliates, and mobile operators shall not be liable for any indirect, incidental, consequential, or special damages arising from the use of the service.",
     ],
   },
   {
     num: "14",
     title: "Modification of Terms",
     items: [
-      "THEGameio reserves the right to amend these Terms & Conditions at any time. Continued use of the service following such changes constitutes acceptance of the updated Terms.",
+      "THE Gameio reserves the right to amend these Terms & Conditions at any time. Continued use of the service following such changes constitutes acceptance of the updated Terms.",
     ],
   },
   {
     num: "15",
     title: "Contact Support",
     items: [
-      "For assistance, inquiries, subscription support, or prize-related questions, please contact the official THEGameio customer support channels available on the website.",
+      "For assistance, inquiries, subscription support, or prize-related questions, please contact the official THE Gameio customer support channels available on the website.",
     ],
   },
 ];
@@ -154,7 +154,7 @@ const policyContents = {
   "Terms & Conditions": {
     icon: <FaFileContract />,
     title: "TERMS & CONDITIONS",
-    date: "© 2026 THEGameio",
+    date: "© 2026 THE Gameio",
     isCustomTerms: true,
   },
   "Privacy Policy": {
@@ -162,7 +162,7 @@ const policyContents = {
     title: "PRIVACY POLICY",
     date: "Last Updated: 2026",
     content: [
-      "1. Data Collection: By using THEGameio, you consent to the collection and processing of your mobile number and gaming activity for service delivery, subscription management, reward fulfillment, and customer support.",
+      "1. Data Collection: By using THE Gameio, you consent to the collection and processing of your mobile number and gaming activity for service delivery, subscription management, reward fulfillment, and customer support.",
       "2. Security & Protection: All personal information and transactions are handled in strict accordance with applicable data protection laws and 256-bit encryption.",
       "3. Fair Play Monitoring: Game play logs and rankings are monitored solely to ensure fair play and prevent unauthorized automation or fraud.",
       "4. User Controls: Users may request access, updates, or removal of their profile information by contacting customer care.",
@@ -213,7 +213,7 @@ const PolicyModal = ({ isOpen, onClose, policyType }) => {
             <div className="terms-full-container">
               <div className="terms-intro-box">
                 <p>
-                  Welcome to <strong>THEGameio</strong>. By accessing or using the service, you agree to be bound by these Terms & Conditions.
+                  Welcome to <strong>THE Gameio</strong>. By accessing or using the service, you agree to be bound by these Terms & Conditions.
                 </p>
               </div>
 
@@ -288,7 +288,7 @@ const PolicyModal = ({ isOpen, onClose, policyType }) => {
               </div>
 
               <div className="terms-copyright-tag">
-                © 2026 THEGameio. All Rights Reserved.
+                © 2026 THE Gameio. All Rights Reserved.
               </div>
             </div>
           ) : currentPolicy.isSupport ? (
@@ -344,7 +344,7 @@ const PolicyModal = ({ isOpen, onClose, policyType }) => {
               </div>
 
               <div className="terms-copyright-tag">
-                © 2026 THEGameio. All Rights Reserved.
+                © 2026 THE Gameio. All Rights Reserved.
               </div>
             </div>
           ) : (

@@ -30,7 +30,7 @@ const getInitialUsers = () => {
       subscription: {
         active: true,
         planId: "pack_weekly",
-        planName: "THEGameio weekly",
+        planName: "THE Gameio weekly",
         price: 5,
         currency: "GHS",
         activatedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
