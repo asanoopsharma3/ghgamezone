@@ -15,11 +15,13 @@
 .brand-logo-text {
   font-family: "WinnerSans", sans-serif;
   font-weight: 900;
-  letter-spacing: 0.6px;
+  letter-spacing: 0.4px;
   font-size: 18px;
   white-space: nowrap;
   display: inline-flex;
   align-items: baseline;
+  gap: 0.35em;
+  text-transform: none;
 }
 
 .brand-logo-the {
