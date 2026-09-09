@@ -110,7 +110,7 @@ function App() {
       const plan = getPlanByOfferCode(offerCode);
       showToast(
         notice.message === "Success"
-          ? `Successfully subscribed to ${plan?.name || "GHGameZone"}! Unlimited play is active.`
+          ? `Successfully subscribed to ${plan?.name || "THEGameio"}! Unlimited play is active.`
           : notice.message
       );
       return;
@@ -132,7 +132,7 @@ function App() {
 
   // Called after payment confirmed and subscription activated in database
   const handleSubscribeSuccess = (planName) => {
-    showToast(`🎉 Successfully Subscribed to ${planName || "GHGameZone"}! Unlimited Play Active.`);
+    showToast(`🎉 Successfully Subscribed to ${planName || "THEGameio"}! Unlimited Play Active.`);
 
     if (pendingGameObj) {
       const g = pendingGameObj;

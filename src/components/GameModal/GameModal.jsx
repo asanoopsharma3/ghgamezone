@@ -186,7 +186,7 @@ const GameModal = ({
         <div className="game-modal-footer">
           <div className="footer-info">
             <FaShieldAlt className="shield-icon" />
-            <span>GhGameZone • Official Embedded Game Experience</span>
+            <span>THEGameio • Official Embedded Game Experience</span>
           </div>
 
           <div className="footer-btns">

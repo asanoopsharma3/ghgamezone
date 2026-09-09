@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import BrandLogo from "../../components/BrandLogo/BrandLogo";
 import "./LeaderboardContent.scss";
 import {
   FaTrophy,
@@ -57,7 +58,7 @@ const LeaderboardContent = ({ onSubscribeClick, onPolicyClick }) => {
               <span className="purple">LEADERBOARD</span>
             </h1>
             <p className="hero-subtitle">
-              Current GHGameZone subscribers by package. Numbers are masked. Daily, weekly, and monthly lists follow the live offer config.
+              Current THEGameio subscribers by package. Numbers are masked. Daily, weekly, and monthly lists follow the live offer config.
             </p>
           </div>
 
@@ -175,7 +176,7 @@ const LeaderboardContent = ({ onSubscribeClick, onPolicyClick }) => {
       <footer className="lb-footer-container">
         <div className="footer-top-row">
           <div className="brand-col">
-            <img src="/logo2.png" alt="GhGameZone" className="footer-logo-img" />
+            <BrandLogo size={34} />
             <p className="brand-tagline">
               Mini games. Maximum fun.
               <br />
@@ -213,7 +214,7 @@ const LeaderboardContent = ({ onSubscribeClick, onPolicyClick }) => {
         </div>
 
         <div className="footer-bottom-copy">
-          <p>© 2026 GHGAMEZONE. All rights reserved.</p>
+          <p>© 2026 THEGameio. All rights reserved.</p>
         </div>
       </footer>
     </div>

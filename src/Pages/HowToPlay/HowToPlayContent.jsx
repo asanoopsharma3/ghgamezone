@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import BrandLogo from "../../components/BrandLogo/BrandLogo";
 import "./HowToPlayContent.scss";
 import {
   FaBolt,
@@ -47,7 +48,7 @@ const stepsData = [
 const faqData = [
   {
     q: "How does the subscription work?",
-    a: "Subscription gives you unlimited play access: GHGameZone Daily for 1 GHS gives 1 whole day (24 hours) unlimited access, Weekly for 5 GHS gives 7 days unlimited play, and Monthly for 18 GHS gives 30 days unlimited play.",
+    a: "Subscription gives you unlimited play access: THEGameio Daily for 1 GHS gives 1 whole day (24 hours) unlimited access, Weekly for 5 GHS gives 7 days unlimited play, and Monthly for 18 GHS gives 30 days unlimited play.",
   },
   {
     q: "How many game attempts do I get?",
@@ -122,7 +123,7 @@ const HowToPlayContent = ({ onSubscribeClick, onPolicyClick }) => {
               <span className="currency">GHS</span>
               <span className="amount">1</span>
             </div>
-            <span className="turns-label">GHGAMEZONE DAILY • 24H UNLIMITED</span>
+            <span className="turns-label">THEGameio DAILY • 24H UNLIMITED</span>
           </div>
 
           <div className="sub-features-list">
@@ -206,7 +207,7 @@ const HowToPlayContent = ({ onSubscribeClick, onPolicyClick }) => {
       <footer className="htp-footer-container">
         <div className="footer-top-row">
           <div className="brand-col">
-            <img src="/logo2.png" alt="GhGameZone" className="footer-logo-img" />
+            <BrandLogo size={34} />
             <p className="brand-tagline">
               Mini games. Maximum fun.
               <br />
@@ -258,7 +259,7 @@ const HowToPlayContent = ({ onSubscribeClick, onPolicyClick }) => {
         </div>
 
         <div className="footer-bottom-copy">
-          <p>© 2026 GHGAMEZONE. All rights reserved.</p>
+          <p>© 2026 THEGameio. All rights reserved.</p>
         </div>
       </footer>
     </div>

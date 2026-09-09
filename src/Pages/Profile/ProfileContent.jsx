@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import BrandLogo from "../../components/BrandLogo/BrandLogo";
 import "./ProfileContent.scss";
 import {
   FaBolt,
@@ -187,7 +188,7 @@ const ProfileContent = ({ onSubscribeClick, onLogout, onAuthClick, onPolicyClick
                 <h3>SUBSCRIPTION VALIDITY</h3>
                 <span className="sub-tagline">
                   {isSubActive 
-                    ? `${activeSub?.planName || "GHGameZone Pass"} • Unlimited Play Access`
+                    ? `${activeSub?.planName || "THEGameio Pass"} • Unlimited Play Access`
                     : "No active unlimited subscription"}
                 </span>
               </div>
@@ -310,7 +311,7 @@ const ProfileContent = ({ onSubscribeClick, onLogout, onAuthClick, onPolicyClick
 
           <div className="sub-box">
             <div className="sub-top">
-              <span className="plan-title">{activeSub?.planName || "GHGAMEZONE PASS"}</span>
+              <span className="plan-title">{activeSub?.planName || "THEGameio PASS"}</span>
               <span className={`status ${isSubActive ? "active" : "expired"}`}>
                 <FaCheckCircle /> {isSubActive ? "LIVE SYNCED" : "UNSUBSCRIBED"}
               </span>
@@ -348,7 +349,7 @@ const ProfileContent = ({ onSubscribeClick, onLogout, onAuthClick, onPolicyClick
       <footer className="profile-footer-container">
         <div className="footer-top-row">
           <div className="brand-col">
-            <img src="/logo2.png" alt="GhGameZone" className="footer-logo-img" />
+            <BrandLogo size={34} />
             <p className="brand-tagline">
               Mini games. Maximum fun.
               <br />
@@ -386,7 +387,7 @@ const ProfileContent = ({ onSubscribeClick, onLogout, onAuthClick, onPolicyClick
         </div>
 
         <div className="footer-bottom-copy">
-          <p>© 2026 GHGAMEZONE. All rights reserved.</p>
+          <p>© 2026 THEGameio. All rights reserved.</p>
         </div>
       </footer>
     </div>

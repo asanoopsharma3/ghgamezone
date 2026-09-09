@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import BrandLogo from "../../components/BrandLogo/BrandLogo";
 import "./ContactContent.scss";
 import {
   FaUserAlt,
@@ -49,7 +50,7 @@ const ContactContent = ({ onPolicyClick }) => {
             <h3 className="hero-subtitle">We're Here to Help You!</h3>
             <p className="hero-description">
               Have questions about your subscription, game turns, prizes, or gameplay? 
-              Reach out to our official MTN customer care and GHGAMEZONE support channels.
+              Reach out to our official MTN customer care and THEGameio support channels.
             </p>
           </div>
 
@@ -231,7 +232,7 @@ const ContactContent = ({ onPolicyClick }) => {
       <footer className="contact-footer-container">
         <div className="footer-top-row">
           <div className="brand-col">
-            <img src="/logo2.png" alt="GhGameZone" className="footer-logo-img" />
+            <BrandLogo size={34} />
             <p className="brand-tagline">
               Mini games. Maximum fun.
               <br />
@@ -283,7 +284,7 @@ const ContactContent = ({ onPolicyClick }) => {
         </div>
 
         <div className="footer-bottom-copy">
-          <p>© 2026 GHGAMEZONE. All rights reserved.</p>
+          <p>© 2026 THEGameio. All rights reserved.</p>
         </div>
       </footer>
     </div>

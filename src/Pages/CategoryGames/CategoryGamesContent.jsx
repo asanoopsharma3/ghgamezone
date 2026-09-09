@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
+import BrandLogo from "../../components/BrandLogo/BrandLogo";
 import "./CategoryGamesContent.scss";
 import {
   FaSearch,
@@ -226,7 +227,7 @@ const CategoryGamesContent = ({ onGameClick, onSubscribeClick, onFooterPolicyCli
       <footer className="cat-footer-container">
         <div className="footer-top-row">
           <div className="brand-col">
-            <img src="/logo2.png" alt="GhGameZone" className="footer-logo-img" />
+            <BrandLogo size={34} />
             <p className="brand-tagline">
               Mini games. Maximum fun.
               <br />
@@ -266,7 +267,7 @@ const CategoryGamesContent = ({ onGameClick, onSubscribeClick, onFooterPolicyCli
         </div>
 
         <div className="footer-bottom-copy">
-          <p>© 2026 GHGAMEZONE. All rights reserved.</p>
+          <p>© 2026 THEGameio. All rights reserved.</p>
         </div>
       </footer>
     </div>

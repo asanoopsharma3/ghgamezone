@@ -1,0 +1,40 @@
+.brand-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  line-height: 1;
+}
+
+.brand-logo-mark {
+  width: auto;
+  display: block;
+  object-fit: contain;
+}
+
+.brand-logo-text {
+  font-family: "WinnerSans", sans-serif;
+  font-weight: 900;
+  letter-spacing: 0.6px;
+  font-size: 18px;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: baseline;
+}
+
+.brand-logo-the {
+  color: #e8eef7;
+}
+
+.brand-logo-name {
+  background: linear-gradient(180deg, #f0abfc 0%, #d946ef 48%, #7c3aed 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@media (max-width: 768px) {
+  .brand-logo-text {
+    font-size: 16px;
+  }
+}

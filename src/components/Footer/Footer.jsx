@@ -9,7 +9,7 @@ import {
   FaTrophy,
 } from "react-icons/fa";
 import { IoGameControllerOutline } from "react-icons/io5";
-import logo from "/logo2.png";
+import BrandLogo from "../BrandLogo/BrandLogo";
 import "./Footer.scss";
 
 const mobileFeatures = [
@@ -55,7 +55,7 @@ const Footer = ({ onPolicyClick }) => {
       {/* FULL WIDTH BOTTOM BAR */}
       <div className="footer-main-bar">
         <div className="footer-left-brand">
-          <img src={logo} alt="GhGameZone" className="footer-logo" />
+          <BrandLogo size={34} />
           <p className="footer-tagline">
             Mini games. Maximum fun.
             <br />

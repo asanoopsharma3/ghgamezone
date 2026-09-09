@@ -7,6 +7,7 @@ import {
 } from "react-icons/fa";
 import "./Navbar.scss";
 import { NavLink } from "react-router-dom";
+import BrandLogo from "../BrandLogo/BrandLogo";
 
 const Navbar = ({ onSubscribeClick, onBuyTokensClick, onSignInClick }) => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -42,15 +43,15 @@ const Navbar = ({ onSubscribeClick, onBuyTokensClick, onSignInClick }) => {
         </div>
 
         <div className="logo">
-          <NavLink to="/">
-            <img src="/logo2.png" alt="GhGameZone" />
+          <NavLink to="/" aria-label="THEGameio home">
+            <BrandLogo size={42} />
           </NavLink>
         </div>
 
         <ul className={menuOpen ? "navLinks active" : "navLinks"}>
           <li className="mobile-nav-logo">
-            <NavLink to="/" onClick={() => setMenuOpen(false)}>
-              <img src="/logo1.png" alt="GhGameZone" />
+            <NavLink to="/" onClick={() => setMenuOpen(false)} aria-label="THEGameio home">
+              <BrandLogo size={48} />
             </NavLink>
           </li>
           <li>
