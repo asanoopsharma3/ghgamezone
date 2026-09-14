@@ -8,8 +8,24 @@ import {
   FaBolt,
   FaShieldAlt,
   FaSpinner,
-  FaExclamationTriangle
+  FaExclamationTriangle,
+  FaSyncAlt
 } from "react-icons/fa";
+
+const LANDSCAPE_SLUGS = new Set([
+  "airport-rush",
+  "billiards",
+  "blocks-super-match3",
+  "candy-match3",
+  "crazy-car",
+  "goof-runner",
+  "math-game-kids",
+  "panda-love",
+  "pops-billiards",
+  "scary-run",
+  "sea-animal",
+  "war-battleship"
+]);
 
 const GameModal = ({ 
   isOpen, 
@@ -22,16 +38,57 @@ const GameModal = ({
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
+  const [isRotated, setIsRotated] = useState(true);
   const iframeRef = useRef(null);
+
+  const isLandscapeGame = Boolean(
+    game?.orientation === "landscape" || 
+    LANDSCAPE_SLUGS.has(game?.id) || 
+    LANDSCAPE_SLUGS.has(game?.slug)
+  );
 
   useEffect(() => {
     if (isOpen && game) {
       setIsLoading(true);
       setLoadError(false);
+      setIsRotated(true);
+      document.body.style.overflow = "hidden";
+
+      // Attempt screen orientation lock if supported (PWA or Android full screen)
+      if (isLandscapeGame && screen.orientation && typeof screen.orientation.lock === "function") {
+        screen.orientation.lock("landscape").catch(() => {
+          // Fallback to CSS rotation if browser denies programmatic lock
+        });
+      }
     }
-  }, [isOpen, game]);
+
+    return () => {
+      document.body.style.overflow = "";
+      if (screen.orientation && typeof screen.orientation.unlock === "function") {
+        try {
+          screen.orientation.unlock();
+        } catch (e) {}
+      }
+    };
+  }, [isOpen, game, isLandscapeGame]);
 
   if (!isOpen || !game) return null;
+
+  const handleClose = () => {
+    if (document.fullscreenElement) {
+      if (document.exitFullscreen) {
+        document.exitFullscreen().catch(() => {});
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      }
+    }
+    if (screen.orientation && typeof screen.orientation.unlock === "function") {
+      try {
+        screen.orientation.unlock();
+      } catch (e) {}
+    }
+    onClose();
+  };
 
   const toggleFullscreen = () => {
     const container = iframeRef.current?.parentElement?.parentElement;
@@ -63,10 +120,15 @@ const GameModal = ({
     setLoadError(true);
   };
 
+  const shouldRotate = isLandscapeGame && isRotated;
+
   return (
-    <div className="game-modal-overlay" onClick={onClose}>
+    <div 
+      className={`game-modal-overlay ${shouldRotate ? "landscape-mode-overlay" : ""}`} 
+      onClick={handleClose}
+    >
       <div 
-        className={`game-modal-container ${isFullscreen ? "fullscreen" : ""}`} 
+        className={`game-modal-container ${isFullscreen ? "fullscreen" : ""} ${shouldRotate ? "landscape-rotated" : ""} ${isLandscapeGame ? "is-landscape-game" : ""}`} 
         onClick={(e) => e.stopPropagation()}
       >
         {/* Top Control Bar */}
@@ -87,6 +149,16 @@ const GameModal = ({
           </div>
 
           <div className="game-header-actions">
+            {isLandscapeGame && (
+              <button 
+                className={`action-icon-btn rotate-btn ${isRotated ? "active" : ""}`} 
+                onClick={() => setIsRotated((prev) => !prev)} 
+                title={isRotated ? "Switch to Upright Portrait" : "Rotate to Wide Screen"}
+                aria-label="Toggle Screen Rotation"
+              >
+                <FaSyncAlt style={{ transform: isRotated ? "rotate(90deg)" : "none", transition: "transform 0.25s ease" }} />
+              </button>
+            )}
             <button 
               className="action-icon-btn" 
               onClick={toggleFullscreen} 
@@ -96,7 +168,7 @@ const GameModal = ({
             </button>
             <button 
               className="action-icon-btn close-btn" 
-              onClick={onClose} 
+              onClick={handleClose} 
               title="Exit Game"
             >
               <FaTimes />
@@ -190,7 +262,7 @@ const GameModal = ({
           </div>
 
           <div className="footer-btns">
-            <button className="exit-game-btn" onClick={onClose}>
+            <button className="exit-game-btn" onClick={handleClose}>
               Exit Game
             </button>
           </div>
