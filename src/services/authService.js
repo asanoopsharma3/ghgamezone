@@ -86,20 +86,29 @@ export const getCurrentUser = async () => {
   if (!token) throw new Error("No token");
 
   const storedCgw = localStorage.getItem("ghgz_cgw_session");
-  if (storedCgw && !token.startsWith("mock_")) {
+  if (storedCgw) {
     try {
-      const data = await authFetch("/v1/subscription/status");
-      const status = data?.subscription?.subscriptionStatus;
-      if (status && status !== "active") {
-        localStorage.removeItem("ghgz_cgw_session");
-        throw new Error("Subscription expired");
-      }
       const parsed = JSON.parse(storedCgw);
-      if (data?.subscription?.nextPlayTime && parsed.subscription) {
-        parsed.subscription.expiresAt = data.subscription.nextPlayTime;
-        parsed.subscription.active = status === "active";
+      const localSub = parsed.subscription || parsed.user?.subscription;
+      const localActive =
+        localSub &&
+        localSub.active !== false &&
+        (!localSub.expiresAt || new Date(localSub.expiresAt).getTime() > Date.now());
+
+      if (localActive) return parsed;
+
+      if (!token.startsWith("mock_")) {
+        const data = await authFetch("/v1/subscription/status");
+        const status = data?.subscription?.subscriptionStatus;
+        if (status && status !== "active") {
+          throw new Error("Subscription expired");
+        }
+        if (data?.subscription?.nextPlayTime && parsed.subscription) {
+          parsed.subscription.expiresAt = data.subscription.nextPlayTime;
+          parsed.subscription.active = status === "active";
+        }
+        return parsed;
       }
-      return parsed;
     } catch (err) {
       if (err.message === "Subscription expired") throw err;
       try {

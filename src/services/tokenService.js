@@ -1,5 +1,6 @@
 import { authFetch } from "./api.js";
 import { mockBackend } from "./mockBackend.js";
+import { hasActivePlayAccess } from "../utils/playAccess.js";
 
 export const getTokenBalance = async () => {
   try {
@@ -12,6 +13,15 @@ export const getTokenBalance = async () => {
 };
 
 export const deductToken = async () => {
+  if (hasActivePlayAccess()) {
+    return {
+      success: true,
+      tokens: 999,
+      unlimited: true,
+      message: "Unlimited subscription active! Game launched.",
+    };
+  }
+
   try {
     const data = await authFetch("/tokens/deduct", {
       method: "POST",

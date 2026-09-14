@@ -12,14 +12,13 @@ import PolicyModal from "./components/PolicyModal/PolicyModal";
 import GameModal from "./components/GameModal/GameModal";
 import { getGameByTitleOrSlug } from "./data/gamesCatalog";
 import { useAuth } from "./context/AuthContext.jsx";
-import { deductToken } from "./services/tokenService.js";
 import { INITIAL_OFFER_CODE, normalizeGhanaMsisdn } from "./config/subscription.js";
 import { getPlanByOfferCode } from "./config/subscriptionPlans.js";
 import { resolveCgwCallbackNotice } from "./utils/cgwStatus.js";
 import "./App.scss";
 
 function App() {
-  const { isSubscribed, applyCgwSession } = useAuth();
+  const { isSubscribed, loading, applyCgwSession } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -42,9 +41,8 @@ function App() {
   }, []);
 
   /**
-   * Time-based Unlimited Game Play Initiation:
-   * 1. If not logged in or no active subscription -> Prompt Subscription Modal (Daily / Weekly / Monthly)
-   * 2. If active subscription -> Launch embedded game iframe with unlimited play!
+   * Active daily / weekly / monthly access launches the game.
+   * Choose Package only appears when there is no valid session subscription.
    */
   const handleGameClick = useCallback(async (titleOrGame) => {
     const targetGame = typeof titleOrGame === "string" 
@@ -53,35 +51,40 @@ function App() {
 
     setSelectedGameTitle(targetGame.title);
 
-    // 1. Not logged in or not subscribed -> Open Subscribe Modal directly
+    if (loading) {
+      setPendingGameObj(targetGame);
+      return;
+    }
+
     if (!isSubscribed) {
       setPendingGameObj(targetGame);
       setIsSubscribeOpen(true);
       return;
     }
 
-    // 2. Prevent race conditions
     if (isDeductingRef.current) return;
 
-    try {
-      isDeductingRef.current = true;
-      const result = await deductToken();
+    isDeductingRef.current = true;
+    setActiveGameObj(targetGame);
+    setIsGameOpen(true);
+    showToast(`🎮 Launching ${targetGame.title} (Unlimited Play Active)`);
+    isDeductingRef.current = false;
+  }, [isSubscribed, loading, showToast]);
 
-      setActiveGameObj(targetGame);
-      setIsGameOpen(true);
-      showToast(`🎮 Launching ${targetGame.title} (Unlimited Play Active)`);
-    } catch (err) {
-      console.error("Game launch error:", err);
-      showToast(err.message || "Please subscribe to get unlimited daily/weekly access.");
-      setPendingGameObj(targetGame);
-      setIsSubscribeOpen(true);
-    } finally {
-      isDeductingRef.current = false;
-    }
-  }, [isSubscribed, showToast]);
+  useEffect(() => {
+    if (loading || !pendingGameObj || isSubscribeOpen || isGameOpen) return;
+    if (!isSubscribed) return;
+    const g = pendingGameObj;
+    setPendingGameObj(null);
+    setSelectedGameTitle(g.title);
+    setActiveGameObj(g);
+    setIsGameOpen(true);
+    showToast(`🎮 Launching ${g.title} (Unlimited Play Active)`);
+  }, [loading, isSubscribed, pendingGameObj, isSubscribeOpen, isGameOpen, showToast]);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
+    if (isSubscribed) return;
     if (
       location.pathname === "/subscribe" ||
       params.get("fallback") === "true" ||
@@ -89,7 +92,7 @@ function App() {
     ) {
       setIsSubscribeOpen(true);
     }
-  }, [location.search, location.pathname]);
+  }, [location.search, location.pathname, isSubscribed]);
 
   useEffect(() => {
     if (!location.pathname.includes("/activation/callback") || callbackHandledRef.current) return;
@@ -101,17 +104,25 @@ function App() {
     const offerCode = params.get("offerCode") || localStorage.getItem("offerCode") || INITIAL_OFFER_CODE;
     const msisdn = normalizeGhanaMsisdn(params.get("msisdn") || localStorage.getItem("phone") || "");
     const planId = params.get("plan") || localStorage.getItem("selectedPlanId");
-    const isSuccess = notice.success && Boolean(token);
+    const alreadySubscribed = /already subscribed/i.test(notice.message || "");
+    const isSuccess = notice.success;
 
     navigate("/", { replace: true });
 
-    if (isSuccess && token) {
-      applyCgwSession({ token, msisdn, offerCode, planId });
+    if (isSuccess) {
+      applyCgwSession({
+        token: token || `cgw_session_${Date.now()}`,
+        msisdn,
+        offerCode,
+        planId,
+      });
       const plan = getPlanByOfferCode(offerCode);
       showToast(
-        notice.message === "Success"
-          ? `Successfully subscribed to ${plan?.name || "THE Gameio"}! Unlimited play is active.`
-          : notice.message
+        alreadySubscribed
+          ? "You are already subscribed. Unlimited play is active."
+          : notice.message === "Success"
+            ? `Successfully subscribed to ${plan?.name || "THE Gameio"}! Unlimited play is active.`
+            : notice.message
       );
       return;
     }
@@ -121,6 +132,10 @@ function App() {
   }, [location.pathname, location.search, applyCgwSession, navigate, showToast]);
 
   const handleBuyAttemptsClick = () => {
+    if (isSubscribed) {
+      showToast("You already have an active daily, weekly, or monthly subscription. Play any game.");
+      return;
+    }
     setSelectedGameTitle("");
     setIsSubscribeOpen(true);
   };

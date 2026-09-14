@@ -1,4 +1,7 @@
 import { SUBSCRIPTION_PACKAGES as PLAN_PACKAGES } from "../config/subscriptionPlans.js";
+import { isSubscriptionValid } from "../utils/playAccess.js";
+
+export { isSubscriptionValid };
 
 const STORAGE_KEY_USERS = "ghgz_db_users";
 const STORAGE_KEY_SESSION = "ghgz_db_current_session";
@@ -44,11 +47,6 @@ const getInitialUsers = () => {
 
 const saveUsers = (users) => {
   localStorage.setItem(STORAGE_KEY_USERS, JSON.stringify(users));
-};
-
-export const isSubscriptionValid = (subscription) => {
-  if (!subscription || !subscription.active || !subscription.expiresAt) return false;
-  return new Date(subscription.expiresAt).getTime() > Date.now();
 };
 
 export const mockBackend = {

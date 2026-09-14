@@ -1,7 +1,14 @@
 import React, { createContext, useReducer, useEffect, useCallback } from "react";
 import { getCurrentUser } from "../services/authService";
 import { getToken, clearToken, setToken } from "../services/api";
-import { isSubscriptionValid } from "../services/mockBackend";
+import {
+  isSubscriptionValid,
+  persistPlayAccess,
+  readStoredCgwSession,
+  getSubscriptionFromSession,
+  hasActivePlayAccess,
+  clearPlayAccess,
+} from "../utils/playAccess.js";
 import {
   buildSubscriptionFromPlan,
   getPlanById,
@@ -61,6 +68,22 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const restoreSession = async () => {
+      const storedCgw = readStoredCgwSession();
+      const storedSub = getSubscriptionFromSession(storedCgw);
+      if (storedCgw && hasActivePlayAccess(storedSub)) {
+        if (storedCgw.token) setToken(storedCgw.token);
+        persistPlayAccess(storedCgw);
+        dispatch({
+          type: "LOGIN_SUCCESS",
+          payload: {
+            user: storedCgw.user,
+            subscription: storedSub,
+            tokens: 999,
+          },
+        });
+        return;
+      }
+
       const token = getToken();
       if (!token) {
         dispatch({ type: "SET_LOADING", payload: false });
@@ -70,6 +93,9 @@ export const AuthProvider = ({ children }) => {
         const userData = await getCurrentUser();
         const user = userData.user || userData;
         const subscription = userData.subscription || user?.subscription || null;
+        if (isSubscriptionValid(subscription)) {
+          persistPlayAccess({ user, subscription, token });
+        }
         dispatch({
           type: "LOGIN_SUCCESS",
           payload: {
@@ -125,6 +151,7 @@ export const AuthProvider = ({ children }) => {
       "ghgz_cgw_session",
       JSON.stringify({ user, subscription, token: token || getToken() })
     );
+    persistPlayAccess({ user, subscription, token: token || getToken() });
 
     dispatch({
       type: "LOGIN_SUCCESS",
@@ -138,6 +165,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("ghgz_cgw_session");
     localStorage.removeItem("offerCode");
     localStorage.removeItem("selectedPlanId");
+    clearPlayAccess();
     dispatch({ type: "LOGOUT" });
   }, []);
 
@@ -147,13 +175,22 @@ export const AuthProvider = ({ children }) => {
 
   const updateSubscription = useCallback((newSubscription) => {
     dispatch({ type: "SET_SUBSCRIPTION", payload: newSubscription });
-  }, []);
+    if (isSubscriptionValid(newSubscription)) {
+      persistPlayAccess({
+        user: state.user,
+        subscription: newSubscription,
+        token: getToken(),
+      });
+    }
+  }, [state.user]);
 
   const setError = useCallback((msg) => {
     dispatch({ type: "SET_ERROR", payload: msg });
   }, []);
 
-  const isSubscribed = isSubscriptionValid(state.subscription || state.user?.subscription);
+  const isSubscribed =
+    isSubscriptionValid(state.subscription || state.user?.subscription) ||
+    hasActivePlayAccess(state.subscription || state.user?.subscription);
 
   const value = {
     ...state,
