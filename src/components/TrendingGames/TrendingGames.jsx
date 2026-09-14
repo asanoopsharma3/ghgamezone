@@ -43,7 +43,8 @@ const TrendingGames = ({ onGameClick }) => {
                   alt={game.title}
                   style={{ objectPosition: game.imagePosition || "center" }}
                   onError={(e) => {
-                    e.target.src = "/games/hero-bg.png";
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = "/hero-bg.png";
                   }}
                 />
                 <div className="image-overlay"></div>

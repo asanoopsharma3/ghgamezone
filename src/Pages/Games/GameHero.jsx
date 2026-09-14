@@ -89,7 +89,8 @@ const GameHero = ({ onGameClick, onBuyAttemptsClick }) => {
             objectPosition: game.imagePosition || "center",
           }}
           onError={(e) => {
-            e.target.src = "/games/hero-bg.png";
+            e.currentTarget.onerror = null;
+            e.currentTarget.src = "/hero-bg.png";
           }}
         />
         <div className="overlay-gradient"></div>
