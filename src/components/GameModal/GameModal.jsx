@@ -190,18 +190,6 @@ const GameModal = ({
           </div>
 
           <div className="footer-btns">
-            {onPlayAgain && (
-              <button 
-                className="open-tab-direct-btn"
-                onClick={() => onPlayAgain(game)}
-                title="Use 1 token to play again"
-              >
-                <FaBolt /> Play Again (-1 Turn)
-              </button>
-            )}
-            <button className="get-turns-btn" onClick={onBuyTokensClick}>
-              <FaBolt /> Buy Tokens
-            </button>
             <button className="exit-game-btn" onClick={onClose}>
               Exit Game
             </button>
