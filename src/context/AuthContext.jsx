@@ -1,5 +1,5 @@
 import React, { createContext, useReducer, useEffect, useCallback } from "react";
-import { getCurrentUser } from "../services/authService";
+import { getCurrentUser, fetchSubscriptionStatus } from "../services/authService";
 import { getToken, clearToken, setToken } from "../services/api";
 import {
   isSubscriptionValid,
@@ -7,7 +7,8 @@ import {
   readStoredCgwSession,
   getSubscriptionFromSession,
   hasActivePlayAccess,
-  clearPlayAccess,
+  revokeLocalSubscription,
+  isRemoteDeactivated,
 } from "../utils/playAccess.js";
 import {
   buildSubscriptionFromPlan,
@@ -81,6 +82,18 @@ export const AuthProvider = ({ children }) => {
             tokens: 999,
           },
         });
+        try {
+          if (storedCgw.token && !String(storedCgw.token).startsWith("mock_")) {
+            const data = await fetchSubscriptionStatus();
+            if (isRemoteDeactivated(data)) {
+              clearToken();
+              revokeLocalSubscription();
+              dispatch({ type: "LOGOUT" });
+            }
+          }
+        } catch {
+          // Keep local play access if status API is unreachable.
+        }
         return;
       }
 
@@ -104,8 +117,13 @@ export const AuthProvider = ({ children }) => {
             tokens: userData.tokens ?? (isSubscriptionValid(subscription) ? 999 : (user?.tokens ?? 0)),
           },
         });
-      } catch {
-        clearToken();
+      } catch (err) {
+        if (err?.message === "Subscription deactivated") {
+          clearToken();
+          revokeLocalSubscription();
+        } else {
+          clearToken();
+        }
         dispatch({ type: "SET_LOADING", payload: false });
       }
     };
@@ -162,12 +180,36 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const logoutUser = useCallback(() => {
-    localStorage.removeItem("ghgz_cgw_session");
-    localStorage.removeItem("offerCode");
-    localStorage.removeItem("selectedPlanId");
-    clearPlayAccess();
+    clearToken();
+    revokeLocalSubscription();
     dispatch({ type: "LOGOUT" });
   }, []);
+
+  const revokeDeactivatedAccess = useCallback(() => {
+    clearToken();
+    revokeLocalSubscription();
+    dispatch({ type: "LOGOUT" });
+  }, []);
+
+  const syncRemoteAccess = useCallback(async () => {
+    const token = getToken();
+    if (!token || String(token).startsWith("mock_")) {
+      return { active: hasActivePlayAccess(state.subscription), deactivated: false };
+    }
+    try {
+      const data = await fetchSubscriptionStatus();
+      if (isRemoteDeactivated(data)) {
+        revokeDeactivatedAccess();
+        return { active: false, deactivated: true };
+      }
+      return { active: true, deactivated: false };
+    } catch {
+      return {
+        active: hasActivePlayAccess(state.subscription),
+        deactivated: false,
+      };
+    }
+  }, [revokeDeactivatedAccess, state.subscription]);
 
   const updateTokens = useCallback((newBalance) => {
     dispatch({ type: "SET_TOKENS", payload: newBalance });
@@ -192,6 +234,28 @@ export const AuthProvider = ({ children }) => {
     isSubscriptionValid(state.subscription || state.user?.subscription) ||
     hasActivePlayAccess(state.subscription || state.user?.subscription);
 
+  useEffect(() => {
+    const token = getToken();
+    if (!token || String(token).startsWith("mock_")) return undefined;
+
+    const run = () => {
+      syncRemoteAccess();
+    };
+    run();
+    const timer = window.setInterval(run, 20000);
+    const onFocus = () => run();
+    const onVisible = () => {
+      if (document.visibilityState === "visible") run();
+    };
+    window.addEventListener("focus", onFocus);
+    document.addEventListener("visibilitychange", onVisible);
+    return () => {
+      window.clearInterval(timer);
+      window.removeEventListener("focus", onFocus);
+      document.removeEventListener("visibilitychange", onVisible);
+    };
+  }, [syncRemoteAccess]);
+
   const value = {
     ...state,
     isLoggedIn: Boolean(state.user),
@@ -200,6 +264,8 @@ export const AuthProvider = ({ children }) => {
     loginSuccess,
     applyCgwSession,
     logoutUser,
+    revokeDeactivatedAccess,
+    syncRemoteAccess,
     updateTokens,
     updateSubscription,
     setError,

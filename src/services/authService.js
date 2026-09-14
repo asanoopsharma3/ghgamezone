@@ -1,5 +1,6 @@
 import { publicFetch, authFetch, setToken, clearToken, getToken } from "./api.js";
 import { mockBackend } from "./mockBackend.js";
+import { isRemoteDeactivated } from "../utils/playAccess.js";
 
 export const sendOtp = async (phoneNumber) => {
   try {
@@ -81,6 +82,12 @@ export const logout = async () => {
   clearToken();
 };
 
+export const fetchSubscriptionStatus = async () => {
+  const token = getToken();
+  if (!token) return null;
+  return authFetch("/v1/subscription/status");
+};
+
 export const getCurrentUser = async () => {
   const token = getToken();
   if (!token) throw new Error("No token");
@@ -89,6 +96,19 @@ export const getCurrentUser = async () => {
   if (storedCgw) {
     try {
       const parsed = JSON.parse(storedCgw);
+      if (!token.startsWith("mock_")) {
+        const data = await authFetch("/v1/subscription/status");
+        if (isRemoteDeactivated(data)) {
+          throw new Error("Subscription deactivated");
+        }
+        const status = data?.subscription?.subscriptionStatus;
+        if (data?.subscription?.nextPlayTime && parsed.subscription) {
+          parsed.subscription.expiresAt = data.subscription.nextPlayTime;
+          parsed.subscription.active = status === "active";
+        }
+        return parsed;
+      }
+
       const localSub = parsed.subscription || parsed.user?.subscription;
       const localActive =
         localSub &&
@@ -96,21 +116,8 @@ export const getCurrentUser = async () => {
         (!localSub.expiresAt || new Date(localSub.expiresAt).getTime() > Date.now());
 
       if (localActive) return parsed;
-
-      if (!token.startsWith("mock_")) {
-        const data = await authFetch("/v1/subscription/status");
-        const status = data?.subscription?.subscriptionStatus;
-        if (status && status !== "active") {
-          throw new Error("Subscription expired");
-        }
-        if (data?.subscription?.nextPlayTime && parsed.subscription) {
-          parsed.subscription.expiresAt = data.subscription.nextPlayTime;
-          parsed.subscription.active = status === "active";
-        }
-        return parsed;
-      }
     } catch (err) {
-      if (err.message === "Subscription expired") throw err;
+      if (err.message === "Subscription deactivated") throw err;
       try {
         return JSON.parse(storedCgw);
       } catch {

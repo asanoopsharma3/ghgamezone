@@ -49,6 +49,21 @@ export const clearPlayAccess = () => {
   sessionStorage.removeItem(PLAY_SESSION_KEY);
 };
 
+export const revokeLocalSubscription = () => {
+  clearPlayAccess();
+  localStorage.removeItem(CGW_SESSION_KEY);
+  localStorage.removeItem("offerCode");
+  localStorage.removeItem("selectedPlanId");
+};
+
+export const isRemoteDeactivated = (payload) => {
+  const sub = payload?.subscription || payload;
+  if (!sub) return false;
+  if (sub.deactivated === true) return true;
+  const sdpStatus = String(sub.sdpStatus || "").trim().toUpperCase();
+  return sdpStatus === "D";
+};
+
 export const hasActivePlayAccess = (subscription) => {
   if (isSubscriptionValid(subscription)) return true;
 

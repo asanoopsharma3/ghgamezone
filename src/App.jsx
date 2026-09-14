@@ -18,7 +18,7 @@ import { resolveCgwCallbackNotice } from "./utils/cgwStatus.js";
 import "./App.scss";
 
 function App() {
-  const { isSubscribed, loading, applyCgwSession } = useAuth();
+  const { isSubscribed, loading, applyCgwSession, syncRemoteAccess } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -56,9 +56,14 @@ function App() {
       return;
     }
 
-    if (!isSubscribed) {
+    const remote = await syncRemoteAccess();
+    if (!isSubscribed || !remote.active || remote.deactivated) {
       setPendingGameObj(targetGame);
+      setIsGameOpen(false);
       setIsSubscribeOpen(true);
+      if (remote.deactivated) {
+        showToast("Your subscription has been deactivated. Please subscribe again.");
+      }
       return;
     }
 
@@ -69,7 +74,14 @@ function App() {
     setIsGameOpen(true);
     showToast(`🎮 Launching ${targetGame.title} (Unlimited Play Active)`);
     isDeductingRef.current = false;
-  }, [isSubscribed, loading, showToast]);
+  }, [isSubscribed, loading, showToast, syncRemoteAccess]);
+
+  useEffect(() => {
+    if (isSubscribed || !isGameOpen) return;
+    setIsGameOpen(false);
+    setIsSubscribeOpen(true);
+    showToast("Your subscription has been deactivated. Please subscribe again.");
+  }, [isSubscribed, isGameOpen, showToast]);
 
   useEffect(() => {
     if (loading || !pendingGameObj || isSubscribeOpen || isGameOpen) return;
