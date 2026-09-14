@@ -318,8 +318,8 @@ const ProfileContent = ({ onSubscribeClick, onLogout, onAuthClick, onPolicyClick
             </div>
             <p className="sub-desc">
               {isSubActive
-                ? `Unlimited turns active. Play all 25 arcade and quiz games without restriction.`
-                : "Subscribe now to access all 25 arcade, quiz, and sports challenges."}
+                ? `Unlimited turns active. Play all arcade and quiz games without restriction.`
+                : "Subscribe now to access all arcade, quiz, and sports challenges."}
             </p>
             <div className="progress-bar-bg">
               <div 
@@ -353,7 +353,7 @@ const ProfileContent = ({ onSubscribeClick, onLogout, onAuthClick, onPolicyClick
             <p className="brand-tagline">
               Mini games. Maximum fun.
               <br />
-              Play 25 games instantly.
+              Play games instantly.
             </p>
           </div>
 

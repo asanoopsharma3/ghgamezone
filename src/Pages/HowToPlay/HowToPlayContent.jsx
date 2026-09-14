@@ -35,7 +35,7 @@ const stepsData = [
     num: "03",
     icon: <FaGamepad />,
     title: "CHOOSE A GAME",
-    desc: "Browse 25 quizzes, arcade, and sports games to pick your favorite.",
+    desc: "Browse quizzes, arcade, and sports games to pick your favorite.",
   },
   {
     num: "04",
@@ -211,7 +211,7 @@ const HowToPlayContent = ({ onSubscribeClick, onPolicyClick }) => {
             <p className="brand-tagline">
               Mini games. Maximum fun.
               <br />
-              Play 25 games instantly.
+              Play games instantly.
             </p>
           </div>
 

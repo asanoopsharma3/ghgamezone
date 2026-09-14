@@ -178,7 +178,7 @@ const CategoryGamesContent = ({ onGameClick, onSubscribeClick, onFooterPolicyCli
                     alt={game.title}
                     style={{ objectPosition: game.imagePosition || "center" }}
                     onError={(e) => {
-                      e.target.src = "/games/batch-bubble-candy-crazycar-crazymatch-firetruck-frog.jpg";
+                      e.target.src = "/games/hero-bg.png";
                     }}
                   />
                   <div className="overlay-gradient"></div>
@@ -231,7 +231,7 @@ const CategoryGamesContent = ({ onGameClick, onSubscribeClick, onFooterPolicyCli
             <p className="brand-tagline">
               Mini games. Maximum fun.
               <br />
-              Play 25 games instantly.
+              Play games instantly.
             </p>
           </div>
 
