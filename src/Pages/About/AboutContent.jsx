@@ -243,7 +243,7 @@ const AboutContent = ({ onPolicyClick }) => {
             <p className="brand-tagline">
               Mini games. Maximum fun.
               <br />
-              Play 25 games instantly.
+              Play games instantly.
             </p>
           </div>
 

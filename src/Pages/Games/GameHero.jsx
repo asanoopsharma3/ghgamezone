@@ -89,7 +89,8 @@ const GameHero = ({ onGameClick, onBuyAttemptsClick }) => {
             objectPosition: game.imagePosition || "center",
           }}
           onError={(e) => {
-            e.target.src = "/games/batch-bubble-candy-crazycar-crazymatch-firetruck-frog.jpg";
+            e.currentTarget.onerror = null;
+            e.currentTarget.src = "/hero-bg.png";
           }}
         />
         <div className="overlay-gradient"></div>
@@ -169,7 +170,7 @@ const GameHero = ({ onGameClick, onBuyAttemptsClick }) => {
           <FaSearch className="search-icon" />
           <input
             type="text"
-            placeholder="Search all 25 games..."
+            placeholder="Search games..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -271,7 +272,7 @@ const GameHero = ({ onGameClick, onBuyAttemptsClick }) => {
             <div className="section-header">
               <div className="header-title">
                 <FaGamepad className="fire-icon" />
-                <h3>ALL 25 GAMES</h3>
+                <h3>ALL GAMES</h3>
               </div>
             </div>
             <div className="games-scroll-grid" style={{ flexWrap: "wrap" }}>

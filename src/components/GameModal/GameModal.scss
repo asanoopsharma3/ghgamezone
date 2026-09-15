@@ -11,6 +11,17 @@
   box-sizing: border-box;
   animation: modalFadeIn 0.3s ease;
 
+  &.landscape-mode-overlay {
+    @media (max-width: 991px) and (orientation: portrait) {
+      padding: 0 !important;
+      overflow: hidden !important;
+    }
+  }
+
+  @media (max-width: 991px) and (orientation: landscape) {
+    padding: 0 !important;
+  }
+
   .game-modal-container {
     width: 100%;
     max-width: 1000px;
@@ -158,6 +169,23 @@
             }
           }
 
+          &.rotate-btn {
+            color: #38bdf8;
+            border-color: rgba(56, 189, 248, 0.35);
+
+            &.active {
+              background: rgba(56, 189, 248, 0.22);
+              color: #38bdf8;
+              border-color: #38bdf8;
+              box-shadow: 0 0 10px rgba(56, 189, 248, 0.35);
+            }
+
+            &:hover {
+              background: rgba(56, 189, 248, 0.35);
+              color: #ffffff;
+            }
+          }
+
           &.close-btn:hover {
             background: rgba(239, 68, 68, 0.6);
             border-color: #ef4444;
@@ -289,6 +317,153 @@
           &:hover {
             background: rgba(255, 255, 255, 0.15);
           }
+        }
+      }
+    }
+
+    /* Auto-rotate wide-screen games on mobile portrait devices */
+    @media (max-width: 991px) and (orientation: portrait) {
+      &.landscape-rotated {
+        position: fixed !important;
+        top: 0 !important;
+        left: 100vw !important;
+        left: 100dvw !important;
+        width: 100vh !important;
+        width: 100dvh !important;
+        height: 100vw !important;
+        height: 100dvw !important;
+        max-width: none !important;
+        max-height: none !important;
+        margin: 0 !important;
+        border-radius: 0 !important;
+        border: none !important;
+        transform: rotate(90deg) !important;
+        transform-origin: top left !important;
+        z-index: 10000 !important;
+        box-shadow: none !important;
+
+        .game-modal-header {
+          padding: 6px 12px;
+          height: 38px;
+          min-height: 38px;
+          box-sizing: border-box;
+
+          .game-header-left {
+            gap: 8px;
+
+            .game-icon-pod {
+              width: 26px;
+              height: 26px;
+              font-size: 13px;
+              border-radius: 6px;
+            }
+
+            .game-title-info {
+              h3 {
+                font-size: 13px;
+                margin: 0;
+              }
+
+              .game-meta-pills {
+                .turns-pill {
+                  display: none;
+                }
+              }
+            }
+          }
+
+          .game-header-actions {
+            gap: 6px;
+
+            .action-icon-btn {
+              width: 28px;
+              height: 28px;
+              font-size: 11px;
+            }
+          }
+        }
+
+        .game-modal-body {
+          flex: 1;
+          width: 100%;
+          height: calc(100vw - 38px) !important;
+          height: calc(100dvw - 38px) !important;
+        }
+
+        .game-modal-footer {
+          display: none !important;
+        }
+      }
+    }
+
+    /* Fullscreen landscape experience when mobile phone is held sideways */
+    @media (max-width: 991px) and (orientation: landscape) {
+      &.is-landscape-game,
+      &.fullscreen {
+        position: fixed !important;
+        inset: 0 !important;
+        width: 100vw !important;
+        width: 100dvw !important;
+        height: 100vh !important;
+        height: 100dvh !important;
+        max-width: none !important;
+        max-height: none !important;
+        margin: 0 !important;
+        border-radius: 0 !important;
+        border: none !important;
+        transform: none !important;
+        box-shadow: none !important;
+
+        .game-modal-header {
+          padding: 4px 12px;
+          height: 36px;
+          min-height: 36px;
+          box-sizing: border-box;
+
+          .game-header-left {
+            gap: 8px;
+
+            .game-icon-pod {
+              width: 24px;
+              height: 24px;
+              font-size: 12px;
+              border-radius: 6px;
+            }
+
+            .game-title-info {
+              h3 {
+                font-size: 13px;
+                margin: 0;
+              }
+
+              .game-meta-pills {
+                .turns-pill {
+                  display: none;
+                }
+              }
+            }
+          }
+
+          .game-header-actions {
+            gap: 6px;
+
+            .action-icon-btn {
+              width: 26px;
+              height: 26px;
+              font-size: 11px;
+            }
+          }
+        }
+
+        .game-modal-body {
+          flex: 1;
+          width: 100%;
+          height: calc(100vh - 36px) !important;
+          height: calc(100dvh - 36px) !important;
+        }
+
+        .game-modal-footer {
+          display: none !important;
         }
       }
     }
