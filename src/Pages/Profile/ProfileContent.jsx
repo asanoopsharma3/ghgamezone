@@ -370,7 +370,7 @@ const ProfileContent = ({ onSubscribeClick, onLogout, onAuthClick, onPolicyClick
             <h4>SUPPORT & LEGAL</h4>
             <button className="footer-link-btn" onClick={() => onPolicyClick && onPolicyClick("Help Center")}>Help Center</button>
             <button className="footer-link-btn" onClick={() => onPolicyClick && onPolicyClick("Terms & Conditions")}>Terms & Conditions</button>
-            <span>Unsubscribe</span>
+            <Link to="/unsubscribe">Unsubscribe</Link>
             <button className="footer-link-btn" onClick={() => onPolicyClick && onPolicyClick("Privacy Policy")}>Privacy Policy</button>
             <button className="footer-link-btn" onClick={() => onPolicyClick && onPolicyClick("Refund Policy")}>Subscription Policy</button>
           </div>

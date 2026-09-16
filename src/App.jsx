@@ -7,6 +7,7 @@ import About from "./Pages/About/About";
 import HowToPlay from "./Pages/HowToPlay/HowToPlay";
 import Contact from "./Pages/Contact/Contact";
 import Leaderboard from "./Pages/Leaderboard/Leaderboard";
+import Unsubscribe from "./Pages/Unsubscribe/Unsubscribe";
 import SubscribeModal from "./components/SubscribeModal/SubscribeModal";
 import PolicyModal from "./components/PolicyModal/PolicyModal";
 import GameModal from "./components/GameModal/GameModal";
@@ -262,6 +263,15 @@ function App() {
           path="/leaderboard"
           element={
             <Leaderboard
+              onSubscribeClick={handleBuyAttemptsClick}
+              onPolicyClick={handlePolicyClick}
+            />
+          }
+        />
+        <Route
+          path="/unsubscribe"
+          element={
+            <Unsubscribe
               onSubscribeClick={handleBuyAttemptsClick}
               onPolicyClick={handlePolicyClick}
             />

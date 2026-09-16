@@ -250,7 +250,7 @@ const CategoryGamesContent = ({ onGameClick, onSubscribeClick, onFooterPolicyCli
             <h4>SUPPORT & LEGAL</h4>
             <button className="footer-link-btn" onClick={() => onFooterPolicyClick && onFooterPolicyClick("Help Center")}>Help Center</button>
             <button className="footer-link-btn" onClick={() => onFooterPolicyClick && onFooterPolicyClick("Terms & Conditions")}>Terms & Conditions</button>
-            <span>Unsubscribe</span>
+            <Link to="/unsubscribe">Unsubscribe</Link>
             <button className="footer-link-btn" onClick={() => onFooterPolicyClick && onFooterPolicyClick("Privacy Policy")}>Privacy Policy</button>
             <button className="footer-link-btn" onClick={() => onFooterPolicyClick && onFooterPolicyClick("Refund Policy")}>Subscription Policy</button>
             <Link to="/how-to-play">FAQ</Link>

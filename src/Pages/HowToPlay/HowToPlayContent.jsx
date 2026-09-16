@@ -232,7 +232,7 @@ const HowToPlayContent = ({ onSubscribeClick, onPolicyClick }) => {
             <button className="footer-link-btn" onClick={() => onPolicyClick && onPolicyClick("Terms & Conditions")}>
               Terms & Conditions
             </button>
-            <span>Unsubscribe</span>
+            <Link to="/unsubscribe">Unsubscribe</Link>
             <button className="footer-link-btn" onClick={() => onPolicyClick && onPolicyClick("Privacy Policy")}>
               Privacy Policy
             </button>

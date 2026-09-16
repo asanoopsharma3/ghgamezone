@@ -76,7 +76,7 @@ const Footer = ({ onPolicyClick }) => {
             <Link to="/about">About Us</Link>
             <button onClick={() => onPolicyClick && onPolicyClick("Privacy Policy")}>Privacy Policy</button>
             <button onClick={() => onPolicyClick && onPolicyClick("Terms & Conditions")}>Terms of Service</button>
-            <span>Unsubscribe</span>
+            <Link to="/unsubscribe">Unsubscribe</Link>
           </div>
 
           <div className="footer-col">
