@@ -20,7 +20,6 @@ import { useAuth } from "../../context/AuthContext.jsx";
 
 const filterCategories = [
   "ALL",
-  "ACTION",
   "PUZZLE",
   "RACING",
   "SPORTS",
