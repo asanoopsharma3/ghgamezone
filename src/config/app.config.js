@@ -62,7 +62,6 @@ export const APP_CONFIG = {
     nhePortalProduction: NHE_PORTAL_PRODUCTION,
     nhePortalUrl: NHE_PORTAL_URL,
     callbackUrl: API_CALLBACK_URL,
-    unsubscribeUrl: env.VITE_UNSUBSCRIBE_URL || "https://www.mtn.com.gh/",
     forceHe: env.VITE_FORCE_HE === "true",
     localSubscription: env.VITE_LOCAL_SUBSCRIPTION === "true",
     localHeMsisdn: env.VITE_LOCAL_HE_MSISDN || "",

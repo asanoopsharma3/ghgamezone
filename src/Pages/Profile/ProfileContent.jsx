@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import BrandLogo from "../../components/BrandLogo/BrandLogo";
-import { APP_CONFIG } from "../../config/app.config.js";
 import "./ProfileContent.scss";
 import {
   FaBolt,
@@ -371,7 +370,7 @@ const ProfileContent = ({ onSubscribeClick, onLogout, onAuthClick, onPolicyClick
             <h4>SUPPORT & LEGAL</h4>
             <button className="footer-link-btn" onClick={() => onPolicyClick && onPolicyClick("Help Center")}>Help Center</button>
             <button className="footer-link-btn" onClick={() => onPolicyClick && onPolicyClick("Terms & Conditions")}>Terms & Conditions</button>
-            <a href={APP_CONFIG.cgw.unsubscribeUrl} target="_blank" rel="noopener noreferrer">Unsubscribe</a>
+            <span>Unsubscribe</span>
             <button className="footer-link-btn" onClick={() => onPolicyClick && onPolicyClick("Privacy Policy")}>Privacy Policy</button>
             <button className="footer-link-btn" onClick={() => onPolicyClick && onPolicyClick("Refund Policy")}>Subscription Policy</button>
           </div>

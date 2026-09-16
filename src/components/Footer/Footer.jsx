@@ -10,7 +10,6 @@ import {
 } from "react-icons/fa";
 import { IoGameControllerOutline } from "react-icons/io5";
 import BrandLogo from "../BrandLogo/BrandLogo";
-import { APP_CONFIG } from "../../config/app.config.js";
 import "./Footer.scss";
 
 const mobileFeatures = [
@@ -77,7 +76,7 @@ const Footer = ({ onPolicyClick }) => {
             <Link to="/about">About Us</Link>
             <button onClick={() => onPolicyClick && onPolicyClick("Privacy Policy")}>Privacy Policy</button>
             <button onClick={() => onPolicyClick && onPolicyClick("Terms & Conditions")}>Terms of Service</button>
-            <a href={APP_CONFIG.cgw.unsubscribeUrl} target="_blank" rel="noopener noreferrer">Unsubscribe</a>
+            <span>Unsubscribe</span>
           </div>
 
           <div className="footer-col">

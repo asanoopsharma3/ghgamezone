@@ -159,7 +159,7 @@
         margin: 0 0 4px 0;
       }
 
-      a, button {
+      a, button, span {
         color: #cbd5e1;
         font-size: 11px;
         text-decoration: none;
@@ -169,10 +169,18 @@
         cursor: pointer;
         padding: 0;
         transition: color 0.2s ease;
+      }
+
+      a, button {
+        cursor: pointer;
 
         &:hover {
           color: #38bdf8;
         }
+      }
+
+      span {
+        cursor: default;
       }
     }
   }

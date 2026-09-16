@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import BrandLogo from "../../components/BrandLogo/BrandLogo";
-import { APP_CONFIG } from "../../config/app.config.js";
 import "./AboutContent.scss";
 import {
   FaGamepad,
@@ -265,9 +264,7 @@ const AboutContent = ({ onPolicyClick }) => {
             <button className="footer-link-btn" onClick={() => onPolicyClick && onPolicyClick("Terms & Conditions")}>
               Terms & Conditions
             </button>
-            <a href={APP_CONFIG.cgw.unsubscribeUrl} target="_blank" rel="noopener noreferrer">
-              Unsubscribe
-            </a>
+            <span>Unsubscribe</span>
             <button className="footer-link-btn" onClick={() => onPolicyClick && onPolicyClick("Privacy Policy")}>
               Privacy Policy
             </button>
