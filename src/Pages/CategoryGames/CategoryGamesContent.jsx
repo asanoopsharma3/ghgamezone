@@ -24,11 +24,7 @@ import { AiOutlineCompass } from "react-icons/ai";
 import { GAMES_CATALOG } from "../../data/gamesCatalog.js";
 
 const categoryMeta = {
-  action: {
-    title: "ACTION GAMES",
-    icon: <GiRevolver />,
-    desc: "Fast-paced, thrill-packed action mini games. Test your reflexes and dominate the arena!",
-  },
+  
   puzzle: {
     title: "PUZZLE GAMES",
     icon: <IoExtensionPuzzleOutline />,
@@ -62,7 +58,6 @@ const categoryMeta = {
 };
 
 const allCategories = [
-  { slug: "action", name: "ACTION" },
   { slug: "puzzle", name: "PUZZLE" },
   { slug: "racing", name: "RACING" },
   { slug: "sports", name: "SPORTS" },
@@ -74,8 +69,8 @@ const allCategories = [
 const CategoryGamesContent = ({ onGameClick, onSubscribeClick, onFooterPolicyClick }) => {
   const { categorySlug } = useParams();
   const navigate = useNavigate();
-  const currentSlug = (categorySlug || "action").toLowerCase();
-  const currentCat = categoryMeta[currentSlug] || categoryMeta["action"];
+  const currentSlug = (categorySlug || "puzzle").toLowerCase();
+  const currentCat = categoryMeta[currentSlug] || categoryMeta["puzzle"];
 
   const [favorites, setFavorites] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
