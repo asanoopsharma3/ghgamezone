@@ -1,6 +1,8 @@
 import { publicFetch, authFetch, setToken, clearToken, getToken } from "./api.js";
 import { mockBackend } from "./mockBackend.js";
 import { isRemoteDeactivated } from "../utils/playAccess.js";
+import { APP_CONFIG, getApiUrl } from "../config/app.config.js";
+import { normalizeGhanaMsisdn } from "../config/subscription.js";
 
 export const sendOtp = async (phoneNumber) => {
   try {
@@ -82,10 +84,50 @@ export const logout = async () => {
   clearToken();
 };
 
+export const fetchPlayAccess = async (msisdn) => {
+  const normalized = normalizeGhanaMsisdn(msisdn || localStorage.getItem("phone") || "");
+  if (!normalized) return null;
+
+  const query = `?msisdn=${encodeURIComponent(normalized)}`;
+  const apiRoot = String(import.meta.env.VITE_API_BASE_URL || "").replace(/\/+$/, "");
+  const urls = Array.from(
+    new Set(
+      [
+        `${getApiUrl(APP_CONFIG.endpoints.subscriptionPlayAccess)}${query}`,
+        apiRoot ? `${apiRoot}/api/v1${APP_CONFIG.endpoints.subscriptionPlayAccess}${query}` : "",
+        apiRoot ? `${apiRoot}/v1${APP_CONFIG.endpoints.subscriptionPlayAccess}${query}` : "",
+      ].filter(Boolean)
+    )
+  );
+
+  for (const url of urls) {
+    try {
+      const res = await fetch(url);
+      const data = (await res.json().catch(() => null)) || null;
+      if (res.ok && data && (typeof data.canPlay === "boolean" || data.subscription)) {
+        return data;
+      }
+    } catch {
+      // try next URL
+    }
+  }
+  return null;
+};
+
 export const fetchSubscriptionStatus = async () => {
+  const msisdn = localStorage.getItem("phone") || "";
+  const byMsisdn = await fetchPlayAccess(msisdn);
+  if (byMsisdn) {
+    return { success: true, subscription: byMsisdn };
+  }
+
   const token = getToken();
   if (!token) return null;
-  return authFetch("/v1/subscription/status");
+  try {
+    return await authFetch("/v1/subscription/status");
+  } catch {
+    return null;
+  }
 };
 
 export const getCurrentUser = async () => {

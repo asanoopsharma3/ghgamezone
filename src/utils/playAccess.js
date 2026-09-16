@@ -1,7 +1,20 @@
 const CGW_SESSION_KEY = "ghgz_cgw_session";
 const PLAY_SESSION_KEY = "ghgz_play_access";
+const MUST_SUBSCRIBE_KEY = "ghgz_must_subscribe";
+
+export const isMustSubscribe = () => localStorage.getItem(MUST_SUBSCRIBE_KEY) === "1";
+
+export const clearMustSubscribe = () => {
+  localStorage.removeItem(MUST_SUBSCRIBE_KEY);
+};
+
+export const markMustSubscribe = () => {
+  localStorage.setItem(MUST_SUBSCRIBE_KEY, "1");
+  sessionStorage.removeItem(PLAY_SESSION_KEY);
+};
 
 export const isSubscriptionValid = (subscription) => {
+  if (isMustSubscribe()) return false;
   if (!subscription) return false;
   if (subscription.active === false) return false;
   if (subscription.expiresAt) {
@@ -50,7 +63,7 @@ export const clearPlayAccess = () => {
 };
 
 export const revokeLocalSubscription = () => {
-  clearPlayAccess();
+  markMustSubscribe();
   localStorage.removeItem(CGW_SESSION_KEY);
   localStorage.removeItem("offerCode");
   localStorage.removeItem("selectedPlanId");
@@ -65,6 +78,7 @@ export const isRemoteDeactivated = (payload) => {
 };
 
 export const hasActivePlayAccess = (subscription) => {
+  if (isMustSubscribe()) return false;
   if (isSubscriptionValid(subscription)) return true;
 
   const stored = readStoredCgwSession();

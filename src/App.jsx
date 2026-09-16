@@ -57,13 +57,16 @@ function App() {
     }
 
     const remote = await syncRemoteAccess();
-    if (!isSubscribed || !remote.active || remote.deactivated) {
+    const allowed = Boolean(remote.canPlay) && remote.active && !remote.deactivated && isSubscribed;
+    if (!allowed) {
       setPendingGameObj(targetGame);
       setIsGameOpen(false);
       setIsSubscribeOpen(true);
-      if (remote.deactivated) {
-        showToast("Your subscription has been deactivated. Please subscribe again.");
-      }
+      showToast(
+        remote.deactivated
+          ? "Your subscription has been deactivated. Please subscribe again."
+          : "Please subscribe to play."
+      );
       return;
     }
 

@@ -9,6 +9,8 @@ import {
   hasActivePlayAccess,
   revokeLocalSubscription,
   isRemoteDeactivated,
+  isMustSubscribe,
+  clearMustSubscribe,
 } from "../utils/playAccess.js";
 import {
   buildSubscriptionFromPlan,
@@ -69,6 +71,12 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const restoreSession = async () => {
+      if (isMustSubscribe()) {
+        revokeLocalSubscription();
+        clearToken();
+        dispatch({ type: "SET_LOADING", payload: false });
+        return;
+      }
       const storedCgw = readStoredCgwSession();
       const storedSub = getSubscriptionFromSession(storedCgw);
       if (storedCgw && hasActivePlayAccess(storedSub)) {
@@ -170,6 +178,7 @@ export const AuthProvider = ({ children }) => {
       JSON.stringify({ user, subscription, token: token || getToken() })
     );
     persistPlayAccess({ user, subscription, token: token || getToken() });
+    clearMustSubscribe();
 
     dispatch({
       type: "LOGIN_SUCCESS",
@@ -192,21 +201,40 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const syncRemoteAccess = useCallback(async () => {
-    const token = getToken();
-    if (!token || String(token).startsWith("mock_")) {
-      return { active: hasActivePlayAccess(state.subscription), deactivated: false };
+    if (isMustSubscribe()) {
+      revokeDeactivatedAccess();
+      return { active: false, deactivated: true, canPlay: false };
     }
+
     try {
       const data = await fetchSubscriptionStatus();
-      if (isRemoteDeactivated(data)) {
-        revokeDeactivatedAccess();
-        return { active: false, deactivated: true };
+      if (!data) {
+        return {
+          active: hasActivePlayAccess(state.subscription),
+          deactivated: false,
+          canPlay: hasActivePlayAccess(state.subscription),
+        };
       }
-      return { active: true, deactivated: false };
+
+      const access = data.subscription || data;
+      if (isRemoteDeactivated(data) || access.deactivated === true || access.canPlay === false) {
+        revokeDeactivatedAccess();
+        return {
+          active: false,
+          deactivated: isRemoteDeactivated(data) || access.deactivated === true,
+          canPlay: false,
+        };
+      }
+
+      return { active: true, deactivated: false, canPlay: true };
     } catch {
+      if (isMustSubscribe()) {
+        return { active: false, deactivated: true, canPlay: false };
+      }
       return {
         active: hasActivePlayAccess(state.subscription),
         deactivated: false,
+        canPlay: hasActivePlayAccess(state.subscription),
       };
     }
   }, [revokeDeactivatedAccess, state.subscription]);
@@ -236,7 +264,8 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const token = getToken();
-    if (!token || String(token).startsWith("mock_")) return undefined;
+    const phone = localStorage.getItem("phone");
+    if (!token && !phone) return undefined;
 
     const run = () => {
       syncRemoteAccess();

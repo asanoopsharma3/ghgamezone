@@ -46,6 +46,7 @@ export const APP_CONFIG = {
     : "daily",
   endpoints: {
     subscriptionStatus: "/subscription/status",
+    subscriptionPlayAccess: "/subscription/play-access",
     subscriptionDevActivate: "/subscription/dev-activate",
     leaderboardSubscribers: "/leaderboard/subscribers",
   },
