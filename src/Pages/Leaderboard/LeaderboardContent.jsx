@@ -197,6 +197,7 @@ const LeaderboardContent = ({ onSubscribeClick, onPolicyClick }) => {
             <h4>SUPPORT & LEGAL</h4>
             <button className="footer-link-btn" onClick={() => onPolicyClick && onPolicyClick("Help Center")}>Help Center</button>
             <button className="footer-link-btn" onClick={() => onPolicyClick && onPolicyClick("Terms & Conditions")}>Terms & Conditions</button>
+            <a href={APP_CONFIG.cgw.unsubscribeUrl} target="_blank" rel="noopener noreferrer">Unsubscribe</a>
             <button className="footer-link-btn" onClick={() => onPolicyClick && onPolicyClick("Privacy Policy")}>Privacy Policy</button>
             <button className="footer-link-btn" onClick={() => onPolicyClick && onPolicyClick("Refund Policy")}>Subscription Policy</button>
           </div>

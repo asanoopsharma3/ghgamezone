@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import BrandLogo from "../../components/BrandLogo/BrandLogo";
+import { APP_CONFIG } from "../../config/app.config.js";
 import "./HowToPlayContent.scss";
 import {
   FaBolt,
@@ -232,6 +233,9 @@ const HowToPlayContent = ({ onSubscribeClick, onPolicyClick }) => {
             <button className="footer-link-btn" onClick={() => onPolicyClick && onPolicyClick("Terms & Conditions")}>
               Terms & Conditions
             </button>
+            <a href={APP_CONFIG.cgw.unsubscribeUrl} target="_blank" rel="noopener noreferrer">
+              Unsubscribe
+            </a>
             <button className="footer-link-btn" onClick={() => onPolicyClick && onPolicyClick("Privacy Policy")}>
               Privacy Policy
             </button>
