@@ -9,10 +9,6 @@ import { AiOutlineCompass } from "react-icons/ai";
 
 const categories = [
   {
-    icon: <GiRevolver />,
-    title: "ACTION",
-  },
-  {
     icon: <IoExtensionPuzzleOutline />,
     title: "PUZZLE",
   },
