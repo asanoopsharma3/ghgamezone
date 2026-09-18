@@ -9,27 +9,6 @@ import {
 } from "../config/subscriptionPlans.js";
 import { normalizeGhanaMsisdn } from "../config/subscription.js";
 
-export const DEMO_USER = {
-  id: "usr_demo_101",
-  username: "Demo Gamer",
-  phoneNumber: "+233541234567",
-  email: "demouser@ghgamezone.com",
-  role: "VIP PRO",
-  avatar: "/avatars/avatar.png",
-  tokens: 999,
-  maxTokens: 100,
-  subscription: {
-    active: true,
-    planId: "pack_weekly",
-    planName: "THE Gameio weekly",
-    price: 5,
-    currency: "GHS",
-    durationLabel: "1 Whole Week",
-    activatedAt: new Date().toISOString(),
-    expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-  },
-};
-
 const initialState = {
   user: null,
   subscription: null,
@@ -155,47 +134,7 @@ export const AuthProvider = ({ children }) => {
     return { user, subscription };
   }, []);
 
-  const loginAsDemoUser = useCallback(() => {
-    const demoSubscription = {
-      active: true,
-      planId: "pack_weekly",
-      planName: "THE Gameio weekly",
-      price: 5,
-      currency: "GHS",
-      durationLabel: "1 Whole Week",
-      activatedAt: new Date().toISOString(),
-      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-    };
-
-    const demoUser = {
-      ...DEMO_USER,
-      subscription: demoSubscription,
-    };
-
-    const mockToken = "mock_demo_token_" + Date.now();
-    setToken(mockToken);
-    localStorage.setItem("phone", "233541234567");
-    localStorage.setItem("offerCode", "9910110199");
-    localStorage.setItem("selectedPlanId", "pack_weekly");
-    localStorage.setItem(
-      "ghgz_cgw_session",
-      JSON.stringify({ user: demoUser, subscription: demoSubscription, token: mockToken })
-    );
-
-    dispatch({
-      type: "LOGIN_SUCCESS",
-      payload: {
-        user: demoUser,
-        tokens: 999,
-        subscription: demoSubscription,
-      },
-    });
-
-    return demoUser;
-  }, []);
-
   const logoutUser = useCallback(() => {
-    clearToken();
     localStorage.removeItem("ghgz_cgw_session");
     localStorage.removeItem("offerCode");
     localStorage.removeItem("selectedPlanId");
@@ -222,7 +161,6 @@ export const AuthProvider = ({ children }) => {
     isSubscribed,
     subscription: state.subscription || state.user?.subscription || null,
     loginSuccess,
-    loginAsDemoUser,
     applyCgwSession,
     logoutUser,
     updateTokens,
