@@ -14,7 +14,6 @@ import {
   FaFire,
   FaRocket,
 } from "react-icons/fa";
-import { GiCrossedSwords } from "react-icons/gi";
 import { GAMES_CATALOG } from "../../data/gamesCatalog.js";
 import { useAuth } from "../../context/AuthContext.jsx";
 
@@ -69,8 +68,8 @@ const GameHero = ({ onGameClick, onBuyAttemptsClick }) => {
     () => GAMES_CATALOG.filter((g) => g.isNew),
     []
   );
-  const actionGames = useMemo(
-    () => GAMES_CATALOG.filter((g) => g.category === "ACTION" || g.category === "RACING"),
+  const racingGames = useMemo(
+    () => GAMES_CATALOG.filter((g) => g.category === "RACING"),
     []
   );
 
@@ -249,20 +248,20 @@ const GameHero = ({ onGameClick, onBuyAttemptsClick }) => {
             </div>
           </section>
 
-          {/* ACTION & RACING SECTION */}
+          {/* RACING & SPEED SECTION */}
           <section className="game-row-section">
             <div className="section-header">
               <div className="header-title">
-                <GiCrossedSwords className="swords-icon" />
-                <h3>ACTION & RACING</h3>
+                <FaRocket className="fire-icon" />
+                <h3>RACING & SPEED</h3>
               </div>
-              <button className="view-all-link" onClick={() => setActiveCategory("ACTION")}>
+              <button className="view-all-link" onClick={() => setActiveCategory("RACING")}>
                 <span>VIEW ALL</span>
                 <FaChevronRight />
               </button>
             </div>
             <div className="games-scroll-grid">
-              {actionGames.map(renderGameCard)}
+              {racingGames.map(renderGameCard)}
             </div>
           </section>
 

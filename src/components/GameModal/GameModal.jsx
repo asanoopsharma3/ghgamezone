@@ -18,11 +18,9 @@ const LANDSCAPE_SLUGS = new Set([
   "blocks-super-match3",
   "candy-match3",
   "crazy-car",
-  "goof-runner",
   "math-game-kids",
   "panda-love",
   "pops-billiards",
-  "scary-run",
   "sea-animal",
   "war-battleship"
 ]);

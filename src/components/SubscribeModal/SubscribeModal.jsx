@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./SubscribeModal.scss";
-import { FaTimes, FaShieldAlt, FaSpinner, FaBolt } from "react-icons/fa";
+import { FaTimes, FaShieldAlt, FaSpinner, FaBolt, FaUserCheck } from "react-icons/fa";
 import { SUBSCRIPTION_PACKAGES } from "../../config/subscriptionPlans.js";
+import { useAuth } from "../../context/AuthContext.jsx";
 import {
   activateLocalSubscription,
   COUNTRY_CODE,
@@ -15,12 +16,22 @@ import {
 } from "../../config/subscription.js";
 
 const SubscribeModal = ({ isOpen, onClose, gameTitle, onSubscribeSuccess }) => {
+  const { loginAsDemoUser } = useAuth();
   const [packages] = useState(SUBSCRIPTION_PACKAGES);
   const [selectedPkgId, setSelectedPkgId] = useState("pack_daily");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [showPhoneInput, setShowPhoneInput] = useState(() => !shouldUseHeFlow());
   const [isProcessing, setIsProcessing] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
+  const handleDemoUserLogin = () => {
+    const demoUser = loginAsDemoUser();
+    if (onSubscribeSuccess) {
+      onSubscribeSuccess(demoUser);
+    } else {
+      onClose();
+    }
+  };
 
   useEffect(() => {
     const sync = () => setShowPhoneInput(!shouldUseHeFlow());
@@ -173,6 +184,29 @@ const SubscribeModal = ({ isOpen, onClose, gameTitle, onSubscribeSuccess }) => {
               )}
             </button>
           </div>
+
+          {/* Quick Demo User Access */}
+          <div className="demo-access-divider">
+            <span>OR TRY WITH DEMO USER</span>
+          </div>
+
+          <button
+            type="button"
+            className="demo-user-login-btn"
+            onClick={handleDemoUserLogin}
+            disabled={isProcessing}
+          >
+            <div className="demo-btn-left">
+              <span className="demo-badge">DEMO</span>
+              <div className="demo-text">
+                <strong>Log In as Demo User</strong>
+                <span>1-Click Unlimited VIP Play (Instant Access)</span>
+              </div>
+            </div>
+            <span className="demo-btn-badge">
+              <FaUserCheck /> Play Now
+            </span>
+          </button>
 
           <div className="security-note">
             <FaShieldAlt className="shield-icon" />

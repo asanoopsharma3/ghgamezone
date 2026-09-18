@@ -3,10 +3,12 @@ import { NavLink } from "react-router-dom";
 import { GoHome } from "react-icons/go";
 import { IoGameControllerOutline } from "react-icons/io5";
 import { GoTrophy } from "react-icons/go";
-import { FaBolt } from "react-icons/fa";
+import { FaBolt, FaUser } from "react-icons/fa";
+import { useAuth } from "../../context/AuthContext.jsx";
 import "./MobileNav.scss";
 
 const MobileNav = () => {
+  const { isLoggedIn } = useAuth();
   return (
     <nav className="mobile-bottom-nav">
       <NavLink
@@ -63,15 +65,27 @@ const MobileNav = () => {
         <span>LEADERBOARD</span>
       </NavLink>
 
-      <NavLink
-        to="/subscribe"
-        className={({ isActive }) =>
-          `nav-item ${isActive ? "active" : ""}`
-        }
-      >
-        <FaBolt className="nav-icon" />
-        <span>SUBSCRIBE</span>
-      </NavLink>
+      {isLoggedIn ? (
+        <NavLink
+          to="/profile"
+          className={({ isActive }) =>
+            `nav-item ${isActive ? "active" : ""}`
+          }
+        >
+          <FaUser className="nav-icon" />
+          <span>PROFILE</span>
+        </NavLink>
+      ) : (
+        <NavLink
+          to="/subscribe"
+          className={({ isActive }) =>
+            `nav-item ${isActive ? "active" : ""}`
+          }
+        >
+          <FaBolt className="nav-icon" />
+          <span>SUBSCRIBE</span>
+        </NavLink>
+      )}
     </nav>
   );
 };

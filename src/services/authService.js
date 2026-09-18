@@ -86,26 +86,35 @@ export const getCurrentUser = async () => {
   if (!token) throw new Error("No token");
 
   const storedCgw = localStorage.getItem("ghgz_cgw_session");
-  if (storedCgw && !token.startsWith("mock_")) {
-    try {
-      const data = await authFetch("/v1/subscription/status");
-      const status = data?.subscription?.subscriptionStatus;
-      if (status && status !== "active") {
-        localStorage.removeItem("ghgz_cgw_session");
-        throw new Error("Subscription expired");
-      }
-      const parsed = JSON.parse(storedCgw);
-      if (data?.subscription?.nextPlayTime && parsed.subscription) {
-        parsed.subscription.expiresAt = data.subscription.nextPlayTime;
-        parsed.subscription.active = status === "active";
-      }
-      return parsed;
-    } catch (err) {
-      if (err.message === "Subscription expired") throw err;
+  if (storedCgw) {
+    if (token.startsWith("mock_")) {
       try {
-        return JSON.parse(storedCgw);
+        const parsed = JSON.parse(storedCgw);
+        if (parsed?.user) return parsed;
       } catch {
         // fall through
+      }
+    } else {
+      try {
+        const data = await authFetch("/v1/subscription/status");
+        const status = data?.subscription?.subscriptionStatus;
+        if (status && status !== "active") {
+          localStorage.removeItem("ghgz_cgw_session");
+          throw new Error("Subscription expired");
+        }
+        const parsed = JSON.parse(storedCgw);
+        if (data?.subscription?.nextPlayTime && parsed.subscription) {
+          parsed.subscription.expiresAt = data.subscription.nextPlayTime;
+          parsed.subscription.active = status === "active";
+        }
+        return parsed;
+      } catch (err) {
+        if (err.message === "Subscription expired") throw err;
+        try {
+          return JSON.parse(storedCgw);
+        } catch {
+          // fall through
+        }
       }
     }
   }

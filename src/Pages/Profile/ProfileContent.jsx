@@ -26,7 +26,7 @@ import { useAuth } from "../../context/AuthContext.jsx";
 const matchHistory = [
   { game: "WOBLOX", result: "VICTORY", points: "+450 PTS", date: "Today, 02:15 PM", attemptsCost: "Unlimited Pass" },
   { game: "CRAZY CAR", result: "VICTORY", points: "+320 PTS", date: "Yesterday", attemptsCost: "Unlimited Pass" },
-  { game: "GOOF RUNNER", result: "DEFEAT", points: "+110 PTS", date: "05 Aug 2024", attemptsCost: "Unlimited Pass" },
+  { game: "BUBBLE SHOOTER", result: "DEFEAT", points: "+110 PTS", date: "05 Aug 2024", attemptsCost: "Unlimited Pass" },
   { game: "AIR HOCKEY", result: "VICTORY", points: "+280 PTS", date: "04 Aug 2024", attemptsCost: "Unlimited Pass" },
 ];
 

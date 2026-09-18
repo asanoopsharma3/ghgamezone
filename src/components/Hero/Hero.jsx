@@ -54,16 +54,16 @@ const heroSlides = [
   {
     id: 4,
     bg: "/games-bg.png",
-    tagPlay: "ACTION •",
-    tagCompete: "COMBAT •",
-    tagConquer: "BATTLE",
-    headingPrefix: "EPIC ARENA",
-    titleWhite: "STICKMAN",
-    titlePurple: "WARRIORS",
-    desc: "Unleash devastating combat combos in smooth physics arenas! Prove your reflexes and claim victory.",
-    primaryBtnText: "Play Stickman",
+    tagPlay: "ARCADE •",
+    tagCompete: "SKILL •",
+    tagConquer: "VICTORY",
+    headingPrefix: "RETRO ARCADE",
+    titleWhite: "BUBBLE",
+    titlePurple: "SHOOTER",
+    desc: "Aim, match and pop colorful bubbles in classic arcade fashion! Clear the board and smash high scores.",
+    primaryBtnText: "Play Bubble Shooter",
     secondaryBtnText: "Leaderboard",
-    primaryAction: "STICKMAN WARRIORS",
+    primaryAction: "BUBBLE SHOOTER",
     secondaryAction: "leaderboard"
   }
 ];

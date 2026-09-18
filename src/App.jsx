@@ -7,6 +7,7 @@ import About from "./Pages/About/About";
 import HowToPlay from "./Pages/HowToPlay/HowToPlay";
 import Contact from "./Pages/Contact/Contact";
 import Leaderboard from "./Pages/Leaderboard/Leaderboard";
+import Profile from "./Pages/Profile/Profile";
 import SubscribeModal from "./components/SubscribeModal/SubscribeModal";
 import PolicyModal from "./components/PolicyModal/PolicyModal";
 import GameModal from "./components/GameModal/GameModal";
@@ -19,7 +20,7 @@ import { resolveCgwCallbackNotice } from "./utils/cgwStatus.js";
 import "./App.scss";
 
 function App() {
-  const { isSubscribed, applyCgwSession } = useAuth();
+  const { isSubscribed, applyCgwSession, logoutUser } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -130,16 +131,21 @@ function App() {
     setIsPolicyOpen(true);
   };
 
-  // Called after payment confirmed and subscription activated in database
-  const handleSubscribeSuccess = (planName) => {
-    showToast(`🎉 Successfully Subscribed to ${planName || "THE Gameio"}! Unlimited Play Active.`);
+  // Called after payment confirmed or demo user activated
+  const handleSubscribeSuccess = (userOrPlan) => {
+    setIsSubscribeOpen(false);
+    const name =
+      typeof userOrPlan === "string"
+        ? userOrPlan
+        : userOrPlan?.username || userOrPlan?.subscription?.planName || "Demo Gamer";
+    showToast(`🎉 Unlimited Play Active for ${name}!`);
 
     if (pendingGameObj) {
       const g = pendingGameObj;
       setPendingGameObj(null);
       setTimeout(() => {
         handleGameClick(g);
-      }, 500);
+      }, 300);
     }
   };
 
@@ -237,7 +243,20 @@ function App() {
             />
           }
         />
-        <Route path="/profile" element={<Navigate to="/" replace />} />
+        <Route
+          path="/profile"
+          element={
+            <Profile
+              onSubscribeClick={handleBuyAttemptsClick}
+              onLogout={() => {
+                logoutUser();
+                showToast("Logged out successfully.");
+                navigate("/");
+              }}
+              onPolicyClick={handlePolicyClick}
+            />
+          }
+        />
       </Routes>
 
       {/* POPUP MODALS */}
