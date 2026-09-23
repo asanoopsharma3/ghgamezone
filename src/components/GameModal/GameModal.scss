@@ -2,132 +2,166 @@
   position: fixed;
   inset: 0;
   z-index: 9999;
-  background: rgba(8, 4, 18, 0.88);
-  backdrop-filter: blur(12px);
+  background: rgba(5, 3, 14, 0.92);
+  backdrop-filter: blur(14px);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 12px;
+  padding: 16px;
   box-sizing: border-box;
-  animation: modalFadeIn 0.3s ease;
+  animation: modalFadeIn 0.2s ease-out;
 
-  &.landscape-mode-overlay {
-    @media (max-width: 991px) and (orientation: portrait) {
-      padding: 0 !important;
-      overflow: hidden !important;
-    }
-  }
-
-  @media (max-width: 991px) and (orientation: landscape) {
+  @media (max-width: 768px) {
     padding: 0 !important;
+    background: #05030e;
   }
 
   .game-modal-container {
-    width: 100%;
-    max-width: 1000px;
-    height: 90vh;
-    max-height: 800px;
-    background: #0d071d;
-    border: 1px solid rgba(168, 85, 247, 0.4);
-    border-radius: 18px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85),
-                0 0 35px rgba(168, 85, 247, 0.25);
+    position: relative;
+    background: #0c0818;
+    border: 1.5px solid rgba(0, 240, 255, 0.4);
+    box-shadow:
+      0 24px 70px rgba(0, 0, 0, 0.95),
+      0 0 35px rgba(0, 240, 255, 0.25);
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    transition: all 0.3s ease;
+    transition: width 0.25s ease, max-width 0.25s ease, height 0.25s ease, border-radius 0.2s ease;
 
-    @media (max-width: 600px) {
-      height: 96vh;
-      max-height: 96vh;
-      border-radius: 12px;
+    /* 1. MOBILE PHONE FRAME (DEFAULT FOR CASUAL/PUZZLE/ARCADE/MOBILE GAMES) */
+    &.mode-mobile {
+      width: 420px;
+      max-width: 96vw;
+      height: min(840px, 94vh);
+      border-radius: 24px;
+      box-shadow:
+        0 24px 70px rgba(0, 0, 0, 0.95),
+        0 0 30px rgba(0, 240, 255, 0.3);
     }
 
-    &.fullscreen {
-      max-width: 100vw;
-      max-height: 100vh;
-      height: 100vh;
-      border-radius: 0;
-      border: none;
+    /* 2. WIDE SCREEN VIEW (FOR LAPTOP & WIDE SCREENS: CALL BREAK, SOLITAIRE, RACING) */
+    &.mode-wide {
+      width: 1040px;
+      max-width: 95vw;
+      height: min(720px, 90vh);
+      border-radius: 18px;
+      border-color: rgba(0, 240, 255, 0.4);
+      box-shadow:
+        0 24px 70px rgba(0, 0, 0, 0.95),
+        0 0 35px rgba(0, 240, 255, 0.25);
     }
 
+    /* 3. FULLSCREEN */
+    &.is-fullscreen {
+      position: fixed !important;
+      inset: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      max-width: none !important;
+      max-height: none !important;
+      border-radius: 0 !important;
+      border: none !important;
+      box-shadow: none !important;
+      z-index: 10000 !important;
+    }
+
+    /* 4. REAL MOBILE PHONES (Natural 100% viewport, zero margin, no rotation) */
+    @media (max-width: 768px) {
+      width: 100vw !important;
+      height: 100vh !important;
+      height: 100dvh !important;
+      max-width: none !important;
+      max-height: none !important;
+      border-radius: 0 !important;
+      border: none !important;
+      box-shadow: none !important;
+      transform: none !important;
+    }
+
+    /* TOP HEADER */
     .game-modal-header {
+      height: 48px;
+      min-height: 48px;
+      padding: 0 14px;
+      background: #110d22;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
-      padding: 10px 14px;
-      background: rgba(18, 12, 38, 0.95);
-      border-bottom: 1px solid rgba(168, 85, 247, 0.25);
+      gap: 10px;
       flex-shrink: 0;
+
+      @media (max-width: 768px) {
+        height: 42px;
+        min-height: 42px;
+        padding: 0 10px;
+      }
 
       .game-header-left {
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 8px;
         min-width: 0;
         flex: 1;
 
         .game-icon-pod {
-          width: 36px;
-          height: 36px;
-          border-radius: 10px;
-          background: linear-gradient(135deg, #a855f7, #ec4899);
+          width: 28px;
+          height: 28px;
+          border-radius: 7px;
+          background: linear-gradient(135deg, #00f0ff, #7928ca);
           display: flex;
           align-items: center;
           justify-content: center;
-          color: #ffffff;
-          font-size: 16px;
+          color: #fff;
+          font-size: 13px;
           flex-shrink: 0;
-          box-shadow: 0 0 12px rgba(236, 72, 153, 0.4);
+          box-shadow: 0 0 8px rgba(0, 240, 255, 0.35);
         }
 
         .game-title-info {
+          display: flex;
+          align-items: center;
+          gap: 6px;
           min-width: 0;
           flex: 1;
+          overflow: hidden;
 
           h3 {
-            font-family: "WinnerSans", sans-serif;
-            font-size: 15px;
+            font-size: 13px;
             font-weight: 800;
             color: #ffffff;
-            letter-spacing: 0.5px;
-            margin: 0 0 2px 0;
+            margin: 0;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            letter-spacing: 0.3px;
           }
 
-          .game-meta-pills {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            flex-wrap: wrap;
+          .tag-category {
+            background: rgba(0, 240, 255, 0.15);
+            border: 1px solid rgba(0, 240, 255, 0.35);
+            color: #38bdf8;
+            font-size: 8px;
+            font-weight: 800;
+            padding: 1px 5px;
+            border-radius: 3px;
+            text-transform: uppercase;
+            flex-shrink: 0;
+          }
 
-            .category-pill {
-              background: rgba(168, 85, 247, 0.2);
-              border: 1px solid rgba(168, 85, 247, 0.4);
-              color: #d8b4fe;
-              font-size: 9px;
-              font-weight: 700;
-              padding: 2px 6px;
-              border-radius: 10px;
-              text-transform: uppercase;
-              white-space: nowrap;
-            }
+          .tag-device-compat {
+            background: rgba(168, 85, 247, 0.18);
+            border: 1px solid rgba(168, 85, 247, 0.4);
+            color: #c084fc;
+            font-size: 8px;
+            font-weight: 800;
+            padding: 1px 6px;
+            border-radius: 3px;
+            text-transform: uppercase;
+            flex-shrink: 0;
 
-            .turns-pill {
-              display: flex;
-              align-items: center;
-              gap: 4px;
-              color: #38bdf8;
-              font-size: 10px;
-              font-weight: 700;
-              white-space: nowrap;
-
-              .coin-icon {
-                color: #fbbf24;
-              }
+            @media (max-width: 560px) {
+              display: none;
             }
           }
         }
@@ -136,334 +170,204 @@
       .game-header-actions {
         display: flex;
         align-items: center;
-        gap: 6px;
+        gap: 4px;
         flex-shrink: 0;
 
         .action-icon-btn {
-          width: 32px;
-          height: 32px;
-          border-radius: 8px;
-          background: rgba(255, 255, 255, 0.08);
-          border: 1px solid rgba(255, 255, 255, 0.15);
-          color: #ffffff;
-          display: flex;
+          width: 28px;
+          height: 28px;
+          border-radius: 6px;
+          background: rgba(255, 255, 255, 0.06);
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          color: #cbd5e1;
+          display: inline-flex;
           align-items: center;
           justify-content: center;
           cursor: pointer;
-          font-size: 12px;
-          transition: all 0.2s ease;
-          flex-shrink: 0;
+          font-size: 11px;
+          text-decoration: none;
+          transition: all 0.18s ease;
 
           &:hover {
-            background: rgba(168, 85, 247, 0.4);
-            border-color: #d946ef;
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
           }
 
-          &.new-tab-btn {
-            color: #38bdf8;
-            border-color: rgba(56, 189, 248, 0.4);
+          &.mode-toggle-btn {
+            background: rgba(0, 240, 255, 0.12);
+            border-color: rgba(0, 240, 255, 0.4);
+            color: #00f0ff;
 
             &:hover {
-              background: rgba(56, 189, 248, 0.3);
-              color: #ffffff;
+              background: #00f0ff;
+              color: #000;
+              box-shadow: 0 0 10px rgba(0, 240, 255, 0.6);
+            }
+
+            &.is-wide {
+              background: rgba(255, 0, 85, 0.15);
+              border-color: rgba(255, 0, 85, 0.4);
+              color: #ff3366;
+
+              &:hover {
+                background: #ff0055;
+                color: #fff;
+                box-shadow: 0 0 10px rgba(255, 0, 85, 0.6);
+              }
+            }
+
+            @media (max-width: 768px) {
+              display: none !important;
             }
           }
 
-          &.rotate-btn {
+          &.reload-btn:hover {
             color: #38bdf8;
-            border-color: rgba(56, 189, 248, 0.35);
+            border-color: #38bdf8;
+          }
 
-            &.active {
-              background: rgba(56, 189, 248, 0.22);
-              color: #38bdf8;
-              border-color: #38bdf8;
-              box-shadow: 0 0 10px rgba(56, 189, 248, 0.35);
-            }
+          &.direct-btn:hover {
+            color: #a855f7;
+            border-color: #a855f7;
+          }
+
+          &.fs-btn:hover {
+            color: #4ade80;
+            border-color: #4ade80;
+          }
+
+          &.close-btn {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: rgba(239, 68, 68, 0.4);
+            color: #fca5a5;
 
             &:hover {
-              background: rgba(56, 189, 248, 0.35);
-              color: #ffffff;
+              background: #ef4444;
+              border-color: #ef4444;
+              color: #fff;
             }
-          }
-
-          &.close-btn:hover {
-            background: rgba(239, 68, 68, 0.6);
-            border-color: #ef4444;
           }
         }
       }
     }
 
-    .game-modal-body {
-      flex: 1;
-      position: relative;
-      background: #000000;
+    /* IFRAME VIEWPORT STAGE: GUARANTEED 100% FILL */
+    .game-stage-viewport {
+      flex: 1 1 0%;
+      min-height: 0;
       width: 100%;
       height: 100%;
+      position: relative;
+      background: #000000;
       overflow: hidden;
 
-      .game-iframe {
+      .game-iframe-element {
+        position: absolute;
+        inset: 0;
         width: 100%;
         height: 100%;
         border: none;
         display: block;
+        background: #000000;
+        touch-action: manipulation;
+        -webkit-overflow-scrolling: touch;
       }
-    }
 
-    .game-modal-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 14px;
-      background: rgba(18, 12, 38, 0.95);
-      border-top: 1px solid rgba(168, 85, 247, 0.25);
-      flex-shrink: 0;
-      gap: 8px;
-
-      @media (max-width: 580px) {
+      .stage-loader {
+        position: absolute;
+        inset: 0;
+        background: #080614;
+        color: #00f0ff;
+        display: flex;
         flex-direction: column;
-        align-items: stretch;
-        gap: 8px;
-        padding: 8px 10px;
-      }
-
-      .footer-info {
-        display: flex;
         align-items: center;
-        gap: 6px;
-        color: #94a3b8;
-        font-size: 11px;
-        white-space: nowrap;
+        justify-content: center;
+        gap: 12px;
+        z-index: 5;
 
-        .shield-icon {
-          color: #3498ff;
+        .spin-icon {
+          font-size: 28px;
+          animation: stageSpin 1s linear infinite;
         }
 
-        @media (max-width: 480px) {
-          font-size: 10px;
+        span {
+          font-size: 12px;
+          font-weight: 800;
+          letter-spacing: 1px;
+          color: #fff;
         }
       }
 
-      .footer-btns {
+      .stage-error {
+        position: absolute;
+        inset: 0;
+        background: #0a0614;
+        color: #f87171;
         display: flex;
+        flex-direction: column;
         align-items: center;
-        gap: 8px;
-        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        padding: 24px;
+        text-align: center;
+        z-index: 5;
 
-        @media (max-width: 580px) {
-          width: 100%;
-          justify-content: space-between;
+        .error-icon {
+          font-size: 32px;
+          color: #ef4444;
         }
 
-        button {
-          padding: 7px 12px;
-          font-size: 11px;
-          border-radius: 8px;
-          white-space: nowrap;
-
-          @media (max-width: 400px) {
-            padding: 6px 8px;
-            font-size: 10px;
-            flex: 1;
-          }
+        h4 {
+          font-size: 15px;
+          font-weight: 800;
+          color: #fff;
+          margin: 0;
         }
 
-        .open-tab-direct-btn {
+        p {
+          font-size: 12px;
+          color: #94a3b8;
+          max-width: 340px;
+          margin: 0;
+        }
+
+        .error-buttons {
           display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 5px;
-          border: 1px solid rgba(56, 189, 248, 0.5);
-          background: rgba(56, 189, 248, 0.15);
-          color: #38bdf8;
-          font-weight: 700;
-          cursor: pointer;
-          transition: all 0.2s ease;
+          gap: 10px;
+          margin-top: 10px;
 
-          &:hover {
-            background: linear-gradient(135deg, #38bdf8, #0284c7);
-            color: #ffffff;
-            border-color: #38bdf8;
-            box-shadow: 0 0 12px rgba(56, 189, 248, 0.5);
-          }
-        }
-
-        .get-turns-btn {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 5px;
-          border: none;
-          background: linear-gradient(135deg, #a855f7, #3b82f6);
-          color: #ffffff;
-          font-weight: 700;
-          cursor: pointer;
-          transition: all 0.2s ease;
-
-          &:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 0 12px rgba(168, 85, 247, 0.5);
-          }
-        }
-
-        .exit-game-btn {
-          border: 1px solid rgba(255, 255, 255, 0.2);
-          background: rgba(255, 255, 255, 0.05);
-          color: #ffffff;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.2s ease;
-
-          &:hover {
-            background: rgba(255, 255, 255, 0.15);
-          }
-        }
-      }
-    }
-
-    /* Auto-rotate wide-screen games on mobile portrait devices */
-    @media (max-width: 991px) and (orientation: portrait) {
-      &.landscape-rotated {
-        position: fixed !important;
-        top: 0 !important;
-        left: 100vw !important;
-        left: 100dvw !important;
-        width: 100vh !important;
-        width: 100dvh !important;
-        height: 100vw !important;
-        height: 100dvw !important;
-        max-width: none !important;
-        max-height: none !important;
-        margin: 0 !important;
-        border-radius: 0 !important;
-        border: none !important;
-        transform: rotate(90deg) !important;
-        transform-origin: top left !important;
-        z-index: 10000 !important;
-        box-shadow: none !important;
-
-        .game-modal-header {
-          padding: 6px 12px;
-          height: 38px;
-          min-height: 38px;
-          box-sizing: border-box;
-
-          .game-header-left {
-            gap: 8px;
-
-            .game-icon-pod {
-              width: 26px;
-              height: 26px;
-              font-size: 13px;
-              border-radius: 6px;
-            }
-
-            .game-title-info {
-              h3 {
-                font-size: 13px;
-                margin: 0;
-              }
-
-              .game-meta-pills {
-                .turns-pill {
-                  display: none;
-                }
-              }
-            }
-          }
-
-          .game-header-actions {
+          button, a {
+            display: inline-flex;
+            align-items: center;
             gap: 6px;
-
-            .action-icon-btn {
-              width: 28px;
-              height: 28px;
-              font-size: 11px;
-            }
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            border: none;
+            transition: all 0.2s ease;
           }
-        }
 
-        .game-modal-body {
-          flex: 1;
-          width: 100%;
-          height: calc(100vw - 38px) !important;
-          height: calc(100dvw - 38px) !important;
-        }
+          .btn-retry {
+            background: #00f0ff;
+            color: #000;
 
-        .game-modal-footer {
-          display: none !important;
-        }
-      }
-    }
-
-    /* Fullscreen landscape experience when mobile phone is held sideways */
-    @media (max-width: 991px) and (orientation: landscape) {
-      &.is-landscape-game,
-      &.fullscreen {
-        position: fixed !important;
-        inset: 0 !important;
-        width: 100vw !important;
-        width: 100dvw !important;
-        height: 100vh !important;
-        height: 100dvh !important;
-        max-width: none !important;
-        max-height: none !important;
-        margin: 0 !important;
-        border-radius: 0 !important;
-        border: none !important;
-        transform: none !important;
-        box-shadow: none !important;
-
-        .game-modal-header {
-          padding: 4px 12px;
-          height: 36px;
-          min-height: 36px;
-          box-sizing: border-box;
-
-          .game-header-left {
-            gap: 8px;
-
-            .game-icon-pod {
-              width: 24px;
-              height: 24px;
-              font-size: 12px;
-              border-radius: 6px;
-            }
-
-            .game-title-info {
-              h3 {
-                font-size: 13px;
-                margin: 0;
-              }
-
-              .game-meta-pills {
-                .turns-pill {
-                  display: none;
-                }
-              }
+            &:hover {
+              background: #fff;
             }
           }
 
-          .game-header-actions {
-            gap: 6px;
+          .btn-open-tab {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
 
-            .action-icon-btn {
-              width: 26px;
-              height: 26px;
-              font-size: 11px;
+            &:hover {
+              background: rgba(255, 255, 255, 0.2);
             }
           }
-        }
-
-        .game-modal-body {
-          flex: 1;
-          width: 100%;
-          height: calc(100vh - 36px) !important;
-          height: calc(100dvh - 36px) !important;
-        }
-
-        .game-modal-footer {
-          display: none !important;
         }
       }
     }
@@ -473,10 +377,17 @@
 @keyframes modalFadeIn {
   from {
     opacity: 0;
-    transform: scale(0.97);
   }
   to {
     opacity: 1;
-    transform: scale(1);
+  }
+}
+
+@keyframes stageSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }

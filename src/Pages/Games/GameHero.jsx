@@ -1,4 +1,5 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import "./GameHero.scss";
 import {
   FaSearch,
@@ -30,9 +31,19 @@ const filterCategories = [
 
 const GameHero = ({ onGameClick, onBuyAttemptsClick }) => {
   const { isSubscribed } = useAuth();
+  const [searchParams] = useSearchParams();
   const [activeCategory, setActiveCategory] = useState("ALL");
   const [favorites, setFavorites] = useState({});
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState(() => searchParams.get("search") || "");
+
+  // Sync with search parameter if changed in URL
+  useEffect(() => {
+    const q = searchParams.get("search");
+    if (q !== null) {
+      setSearchQuery(q);
+      if (q.trim()) setActiveCategory("ALL");
+    }
+  }, [searchParams]);
 
   const toggleFavorite = (e, id) => {
     e.stopPropagation();
