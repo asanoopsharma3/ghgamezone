@@ -10,8 +10,8 @@ const getConnectionType = () => String(getConnection()?.type || "").toLowerCase(
 export const INITIAL_OFFER_CODE = APP_CONFIG.cgw.initialOfferCode;
 export const HE_REDIRECT_URL = APP_CONFIG.cgw.heRedirectUrl;
 export const CGW_BACKEND_CALLBACK_URL = APP_CONFIG.cgw.callbackUrl;
-/** NHE always uses SIT Portal. HE never uses this URL. */
-export const CGW_NHE_PORTAL_URL = APP_CONFIG.cgw.nhePortalStaging;
+/** NHE uses production/staging portal from config. HE never uses this URL. */
+export const CGW_NHE_PORTAL_URL = APP_CONFIG.cgw.nhePortalUrl;
 export const FORCE_HE = isDevelopmentEnv() && APP_CONFIG.cgw.forceHe;
 export const COUNTRY_CODE = "233";
 export const PHONE_INPUT_MAX_LENGTH = 9;
