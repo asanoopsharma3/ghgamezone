@@ -80,6 +80,17 @@ function App() {
     isDeductingRef.current = false;
   }, [isSubscribed, loading, showToast, syncRemoteAccess]);
 
+  // Global event listener to launch any game from Navbar search or other components
+  useEffect(() => {
+    const handleGlobalGameLaunch = (e) => {
+      if (e.detail) {
+        handleGameClick(e.detail);
+      }
+    };
+    window.addEventListener("launch-game", handleGlobalGameLaunch);
+    return () => window.removeEventListener("launch-game", handleGlobalGameLaunch);
+  }, [handleGameClick]);
+
   useEffect(() => {
     if (isSubscribed || !isGameOpen) return;
     setIsGameOpen(false);
