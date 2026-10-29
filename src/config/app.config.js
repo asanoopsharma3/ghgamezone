@@ -20,8 +20,8 @@ const HE_REDIRECT_URL = env.VITE_HE_REDIRECT_URL || "http://98.71.49.187/Redirec
 const API_CALLBACK_URL = trimTrailingSlash(
   env.VITE_HE_CALLBACK_URL || `${API_BASE_URL}/callback`
 );
-const NHE_PORTAL_STAGING = "https://cg.mtn.com.gh/Portal";
-const NHE_PORTAL_PRODUCTION = "https://cg.mtn.com.gh/Portal";
+const NHE_PORTAL_STAGING = "https://cgnp.mtn.com.gh/Portal";
+const NHE_PORTAL_PRODUCTION = "https://cgnp.mtn.com.gh/Portal";
 const NHE_PORTAL_URL =
   env.VITE_NHE_PORTAL_URL ||
   (CGW_ENV === "production" ? NHE_PORTAL_PRODUCTION : NHE_PORTAL_STAGING);
