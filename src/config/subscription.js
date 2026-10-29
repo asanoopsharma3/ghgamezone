@@ -57,7 +57,7 @@ export const shouldUseHeFlow = () => {
   if (isWifiOrLanConnection()) return false;
   if (isMobileNetworkCandidate()) return true;
   // Safari/iOS has no Network Information API, so cellular cannot be read.
-  // Treat mobile Safari as HE and skip the MSISDN field.
+  // Treat mobile Safari as HE so MSISDN comes from header enrichment.
   if (!getConnectionType() && (isSafariBrowser() || isMobileDevice())) return true;
   return false;
 };
@@ -102,22 +102,23 @@ export const sanitizeLocalPhoneInput = (value) =>
 export const isValidLocalPhoneInput = (value) =>
   sanitizeLocalPhoneInput(value).length === PHONE_INPUT_MAX_LENGTH;
 
-export const getHeRedirectParams = (offerCode = INITIAL_OFFER_CODE, planId = "daily", msisdn = "") => {
-  const rawMsisdn =
-    msisdn || (FORCE_HE && APP_CONFIG.cgw.localHeMsisdn ? APP_CONFIG.cgw.localHeMsisdn : "");
-  return {
+export const getHeRedirectParams = (offerCode = INITIAL_OFFER_CODE, planId = "daily") => {
+  const params = {
     OfferCode: offerCode,
-    msisdn: rawMsisdn ? normalizeGhanaMsisdn(rawMsisdn) : "",
     redirectUrl: buildCallbackUrl("HE", planId),
   };
+  // Production HE must not send msisdn in the query. Empty msisdn= blocks header enrichment.
+  // Local FORCE_HE can attach a test number because there is no operator header on WiFi.
+  if (FORCE_HE && APP_CONFIG.cgw.localHeMsisdn) {
+    params.msisdn = normalizeGhanaMsisdn(APP_CONFIG.cgw.localHeMsisdn);
+  }
+  return params;
 };
 
-export const startHeSubscription = (offerCode = INITIAL_OFFER_CODE, planId = "daily", msisdn = "") => {
+export const startHeSubscription = (offerCode = INITIAL_OFFER_CODE, planId = "daily") => {
   localStorage.setItem("offerCode", offerCode);
   localStorage.setItem("selectedPlanId", planId);
-  const normalized = normalizeGhanaMsisdn(msisdn);
-  if (normalized) localStorage.setItem("phone", normalized);
-  const params = new URLSearchParams(getHeRedirectParams(offerCode, planId, msisdn));
+  const params = new URLSearchParams(getHeRedirectParams(offerCode, planId));
   window.location.replace(`${HE_REDIRECT_URL}?${params.toString()}`);
 };
 
@@ -125,19 +126,21 @@ export const startNheSubscription = (msisdn, offerCode = INITIAL_OFFER_CODE, pla
   localStorage.setItem("offerCode", offerCode);
   localStorage.setItem("selectedPlanId", planId);
   const normalized = normalizeGhanaMsisdn(msisdn);
-  if (normalized) localStorage.setItem("phone", normalized);
+  if (!normalized) return;
+  localStorage.setItem("phone", normalized);
 
   const params = new URLSearchParams({
     OfferCode: offerCode,
     redirectUrl: buildCallbackUrl("NHE", planId),
     mobileNumber: normalized,
+    msisdn: normalized,
   });
   window.location.href = `${CGW_NHE_PORTAL_URL}?${params.toString()}`;
 };
 
 export const startCgwByNetwork = (msisdn, offerCode = INITIAL_OFFER_CODE, planId = "daily") => {
   if (shouldUseHeFlow()) {
-    startHeSubscription(offerCode, planId, msisdn);
+    startHeSubscription(offerCode, planId);
     return;
   }
   if (msisdn) {
